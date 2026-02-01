@@ -7,15 +7,13 @@
     <style>
         :root {
             --bg: #000000;
-            --line: rgba(74, 144, 164, 0.4);
+            --line: rgba(74, 144, 164, 0.3);
+            --accent: #4AC8DC;
             --text-main: #ffffff;
             --text-dim: #888888;
-            --text-micro: #666666;
-            --accent: #4AC8DC;
-            --red: #ff4444;
+            --text-micro: #555555;
             --green: #44cc88;
-            --blue: #4488ff;
-            --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --red: #ff4444;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,184 +21,27 @@
         body {
             background-color: var(--bg);
             color: var(--text-main);
-            font-family: var(--font);
+            font-family: 'Inter', -apple-system, sans-serif;
             height: 100vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            font-size: 13px;
         }
 
-        /* Blueprint Lines */
-        .grid-v {
+        /* --- Blueprint Layout --- */
+        .center-line {
             position: absolute;
             left: 50%;
-            top: 100px;
-            bottom: 80px;
+            top: 140px;
+            bottom: 100px;
             width: 1px;
             background: var(--line);
             z-index: 1;
         }
 
-        .grid-h {
+        .horizontal-line {
             position: absolute;
-            left: 5%;
-            right: 5%;
-            height: 1px;
-            background: var(--line);
-            z-index: 1;
-        }
-
-        /* Header */
-        header {
-            height: 100px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            border-bottom: 1px solid var(--line);
-        }
-
-        h1 {
-            font-weight: 300;
-            letter-spacing: 8px;
-            font-size: 20px;
-            margin-bottom: 8px;
-            border-bottom: 1px solid var(--accent);
-            padding-bottom: 4px;
-        }
-
-        .header-micro {
-            font-size: 10px;
-            color: var(--text-micro);
-            font-style: italic;
-            text-align: center;
-        }
-
-        .lang-switch {
-            position: absolute;
-            right: 40px;
-            top: 40px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .lang-btn {
-            background: none;
-            border: 1px solid var(--line);
-            color: var(--text-dim);
-            padding: 3px 8px;
-            cursor: pointer;
-            font-size: 10px;
-            transition: 0.3s;
-        }
-
-        .lang-btn.active { color: white; border-color: white; }
-
-        /* Main Content */
-        main {
-            display: flex;
-            flex: 1;
-            padding: 20px 5%;
-            position: relative;
-            z-index: 2;
-        }
-
-        .col {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 0 40px;
-        }
-
-        .row-item {
-            border-bottom: 1px solid var(--line);
-            padding: 12px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .row-item.no-border { border: none; }
-
-        .headline { font-size: 14px; font-weight: 400; margin-bottom: 4px; }
-        .micro { font-size: 10px; color: var(--text-micro); line-height: 1.3; max-width: 250px; }
-        .metric-val { font-size: 24px; font-weight: 200; color: var(--text-main); }
-
-        /* Chloride/Sodium Box */
-        .split-box {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            padding: 15px 0;
-            border-bottom: 1px solid var(--line);
-        }
-
-        .box-title { font-size: 11px; color: var(--text-dim); margin-bottom: 8px; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
-        .data-point { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 3px; }
-        .val-after { color: var(--green); font-weight: bold; }
-        .status-check { color: var(--green); font-size: 10px; margin-top: 5px; }
-
-        /* Right Column: Table */
-        .badge-row { display: flex; gap: 8px; margin-bottom: 15px; }
-        .badge {
-            border: 1px solid var(--line);
-            padding: 2px 8px;
-            font-size: 9px;
-            color: var(--text-dim);
-            cursor: help;
-            position: relative;
-        }
-        .badge:hover { color: white; border-color: var(--accent); }
-
-        /* Tooltip logic */
-        .badge .tt {
-            visibility: hidden; width: 180px; background: #111; border: 1px solid var(--accent);
-            padding: 8px; position: absolute; bottom: 125%; left: 0; z-index: 10;
-            opacity: 0; transition: 0.3s; font-size: 9px; pointer-events: none;
-        }
-        .badge:hover .tt { visibility: visible; opacity: 1; }
-
-        .table-wrap {
-            max-height: 240px;
-            overflow-y: auto;
-            border: 1px solid var(--line);
-            margin-bottom: 10px;
-        }
-        .table-wrap::-webkit-scrollbar { width: 3px; }
-        .table-wrap::-webkit-scrollbar-thumb { background: var(--line); }
-
-        table { width: 100%; border-collapse: collapse; font-size: 11px; }
-        th { text-align: left; padding: 8px; color: var(--text-micro); font-weight: 400; font-size: 9px; background: rgba(255,255,255,0.05); }
-        td { padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-
-        .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; }
-        .dot.red { background: var(--red); box-shadow: 0 0 6px var(--red); }
-        .dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
-
-        .view-more {
-            color: var(--accent); font-size: 10px; cursor: pointer; padding: 5px 0; display: inline-block;
-        }
-
-        .legend { font-size: 9px; color: var(--text-micro); margin-top: 10px; line-height: 1.5; }
-        .nda-block {
-            margin-top: 15px; border: 1px solid var(--line); padding: 10px;
-            font-size: 9px; color: var(--text-dim); line-height: 1.4;
-        }
-
-        /* Footer */
-        footer {
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .footer-line {
-            position: absolute;
-            top: 50%;
+            bottom: 100px;
             left: 0;
             right: 0;
             height: 1px;
@@ -208,260 +49,356 @@
             z-index: 1;
         }
 
-        .logo-wrap {
-            position: relative;
-            z-index: 2;
-            background: var(--bg);
-            padding: 0 30px;
+        /* --- Header --- */
+        header {
+            height: 140px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--line);
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-weight: 300;
+            letter-spacing: 8px;
+            font-size: 24px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .header-micro {
+            font-size: 11px;
+            color: var(--text-dim);
+            font-style: italic;
+            text-align: center;
+            max-width: 700px;
+            line-height: 1.4;
+        }
+
+        .lang-switch {
+            position: absolute;
+            right: 40px;
+            top: 40px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: 1px solid var(--line);
+            color: var(--text-dim);
+            padding: 4px 10px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: 0.3s;
+            margin-left: 5px;
+        }
+
+        .lang-btn.active { color: white; border-color: white; }
+
+        /* --- Main --- */
+        main {
+            display: flex;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .col {
+            flex: 1;
+            padding: 40px 60px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Left Side Content --- */
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(74, 144, 164, 0.15);
+        }
+
+        .metric-label .headline { font-size: 14px; margin-bottom: 4px; color: var(--text-main); }
+        .metric-label .micro { font-size: 10px; color: var(--text-micro); line-height: 1.3; max-width: 300px; }
+        .metric-value { font-size: 28px; font-weight: 200; letter-spacing: -1px; }
+
+        .dual-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(74, 144, 164, 0.15);
+        }
+
+        .dual-col h3 { font-size: 12px; color: var(--text-dim); margin-bottom: 10px; font-weight: 400; text-transform: uppercase; letter-spacing: 1px; }
+        .data-point { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 3px; }
+        .val-green { color: var(--green); font-weight: 500; }
+        .status-check { color: var(--green); font-size: 11px; margin-top: 8px; display: flex; align-items: center; gap: 5px; }
+
+        /* --- Right Side Content --- */
+        .badge-row { display: flex; gap: 10px; margin-bottom: 25px; }
+        .badge { border: 1px solid var(--line); padding: 3px 10px; font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+
+        h2.table-h { font-size: 18px; font-weight: 300; margin-bottom: 5px; }
+        .table-sub { font-size: 11px; color: var(--text-dim); margin-bottom: 20px; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        th { text-align: left; padding: 10px 5px; color: var(--text-micro); font-weight: 400; border-bottom: 1px solid var(--line); text-transform: uppercase; font-size: 10px; }
+        td { padding: 12px 5px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+        .status-cell { display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 11px; }
+        .dot { width: 7px; height: 7px; border-radius: 50%; }
+        .dot.red { background: var(--red); box-shadow: 0 0 8px var(--red); }
+        .dot.green { background: var(--green); box-shadow: 0 0 8px var(--green); }
+
+        .legend { font-size: 10px; color: var(--text-micro); margin-top: 20px; line-height: 1.6; }
+        .nda-note { margin-top: auto; padding: 15px 0; font-size: 11px; color: var(--text-dim); border-top: 1px solid var(--line); line-height: 1.5; }
+
+        /* --- Footer --- */
+        footer {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 5;
+        }
+
+        .logo-box {
+            background: var(--bg);
+            padding: 0 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
         }
 
         .logo-circle {
-            width: 60px; height: 60px;
+            width: 80px;
+            height: 80px;
             border: 1px solid var(--accent);
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 20px rgba(74, 200, 220, 0.3);
-            margin-bottom: 5px;
-            animation: pulse 4s infinite ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            background: var(--bg);
+            box-shadow: 0 0 25px rgba(74, 200, 220, 0.2);
         }
-        @keyframes pulse { 0%, 100% { box-shadow: 0 0 10px rgba(74, 200, 220, 0.2); } 50% { box-shadow: 0 0 25px rgba(74, 200, 220, 0.5); } }
 
-        .brand { font-size: 12px; letter-spacing: 5px; color: white; font-weight: 300; }
+        .logo-circle svg { width: 40px; height: 40px; }
+        .brand-name { font-size: 14px; letter-spacing: 6px; font-weight: 300; text-transform: uppercase; }
+
+        /* Custom Scrollbar for Right Side */
+        .scroll-area { flex: 1; overflow-y: auto; padding-right: 10px; }
+        .scroll-area::-webkit-scrollbar { width: 2px; }
+        .scroll-area::-webkit-scrollbar-thumb { background: var(--line); }
     </style>
 </head>
 <body>
 
-<div class="grid-v"></div>
+    <div class="center-line"></div>
+    <div class="horizontal-line"></div>
 
-<header>
-    <div class="lang-switch">
-        <button class="lang-btn active" onclick="setLang('en')">EN</button>
-        <button class="lang-btn" onclick="setLang('ru')">RU</button>
-    </div>
-    <h1 id="txt-title">QUALITY & STANDARDS</h1>
-    <p class="header-micro" id="txt-header-micro">Public disclosure level: numbers shown only for safe-to-disclose "hook metrics"; the table shows status trends without values.</p>
-</header>
+    <header>
+        <div class="lang-switch">
+            <button class="lang-btn active" onclick="setLang('en')">EN</button>
+            <button class="lang-btn" onclick="setLang('ru')">RU</button>
+        </div>
+        <h1 id="txt-title">QUALITY & STANDARDS</h1>
+        <p class="header-micro" id="txt-header-micro">Public disclosure level: numbers shown only for safe-to-disclose "hook metrics"; status trends without values.</p>
+    </header>
 
-<main>
-    <!-- LEFT COLUMN -->
-    <div class="col">
-        <div class="row-item">
-            <div>
-                <div class="headline" id="txt-salt-h">Salt reduction (pilot)</div>
-                <div class="micro" id="txt-salt-m">representative pilot samples (chain-of-custody); feed/config-dependent.</div>
+    <main>
+        <!-- LEFT COLUMN -->
+        <section class="col">
+            <div class="metric-row">
+                <div class="metric-label">
+                    <div class="headline" id="txt-salt-h">Salt reduction (pilot)</div>
+                    <div class="micro" id="txt-salt-m">based on representative pilot samples (chain-of-custody); feed-dependent.</div>
+                </div>
+                <div class="metric-value">~900–1500×</div>
             </div>
-            <div class="metric-val">~900–1500×</div>
-        </div>
 
-        <div class="row-item">
-            <div>
-                <div class="headline" id="txt-rec-h">Product water recovery</div>
-                <div class="micro" id="txt-rec-m">feed-dependent; ultra-low concentrate / reject volume (full protocols after e-NDA).</div>
+            <div class="metric-row">
+                <div class="metric-label">
+                    <div class="headline" id="txt-rec-h">Product water recovery</div>
+                    <div class="micro" id="txt-rec-m">ultra-low concentrate / reject volume (full protocols after e-NDA).</div>
+                </div>
+                <div class="metric-value">up to 98%</div>
             </div>
-            <div class="metric-val">up to 98%</div>
-        </div>
 
-        <div class="split-box">
-            <div>
-                <div class="box-title" id="txt-cl-h">Chloride (Cl⁻)</div>
-                <div class="data-point"><span id="txt-raw1">Raw:</span> <span>48,000 mg/L</span></div>
-                <div class="data-point"><span id="txt-after1">After:</span> <span class="val-after">52 mg/L</span></div>
-                <div class="status-check" id="txt-st1">✅ well below benchmark</div>
+            <div class="dual-metrics">
+                <div class="dual-col">
+                    <h3 id="txt-cl-h">Chloride (Cl⁻)</h3>
+                    <div class="data-point"><span id="txt-raw1">Raw:</span> <span>48,000 mg/L</span></div>
+                    <div class="data-point"><span id="txt-after1">After:</span> <span class="val-green">52 mg/L</span></div>
+                    <div class="status-check" id="txt-st1">✓ well below benchmark</div>
+                </div>
+                <div class="dual-col">
+                    <h3 id="txt-na-h">Sodium (Na⁺)</h3>
+                    <div class="data-point"><span id="txt-raw2">Raw:</span> <span>23,200 mg/L</span></div>
+                    <div class="data-point"><span id="txt-after2">After:</span> <span class="val-green">16 mg/L</span></div>
+                    <div class="status-check" id="txt-st2">✓ well below benchmark</div>
+                </div>
             </div>
-            <div>
-                <div class="box-title" id="txt-na-h">Sodium (Na⁺)</div>
-                <div class="data-point"><span id="txt-raw2">Raw:</span> <span>23,200 mg/L</span></div>
-                <div class="data-point"><span id="txt-after2">After:</span> <span class="val-after">16 mg/L</span></div>
-                <div class="status-check" id="txt-st2">✅ well below benchmark</div>
+
+            <div class="metric-row">
+                <div class="metric-label">
+                    <div class="headline" id="txt-part-h">Particle removal</div>
+                    <div class="micro" id="txt-part-m">colloids / suspended matter; verified on pilot samples.</div>
+                </div>
+                <div class="metric-value">&lt; 1 μm</div>
             </div>
-        </div>
 
-        <div class="row-item">
-            <div>
-                <div class="headline" id="txt-part-h">Particle removal</div>
-                <div class="micro" id="txt-part-m">colloids / suspended matter; verified on pilot samples (chain-of-custody).</div>
+            <div class="metric-row" style="border-bottom: none;">
+                <div class="metric-label">
+                    <div class="headline" id="txt-sal-h">Feed salinity tolerance</div>
+                    <div class="micro" id="txt-sal-m">dissolved salts (TDS); feed-dependent.</div>
+                </div>
+                <div class="metric-value">up to 200 g/L</div>
             </div>
-            <div class="metric-val">< 1 μm</div>
-        </div>
+        </section>
 
-        <div class="row-item no-border">
-            <div>
-                <div class="headline" id="txt-sal-h">Feed salinity tolerance</div>
-                <div class="micro" id="txt-sal-m">dissolved salts (TDS); feed-dependent.</div>
+        <!-- RIGHT COLUMN -->
+        <section class="col">
+            <div class="scroll-area">
+                <div class="badge-row">
+                    <div class="badge">WHO</div>
+                    <div class="badge">EU</div>
+                    <div class="badge">US EPA</div>
+                    <div class="badge">Lab-verified</div>
+                </div>
+
+                <h2 class="table-h" id="txt-table-h">Quality trends before/after</h2>
+                <p class="table-sub" id="txt-table-s">Status comparison vs WHO/EU/US EPA benchmarks.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th id="th-p">Parameter</th>
+                            <th id="th-r">Raw status</th>
+                            <th id="th-a">After status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <!-- JS injected rows -->
+                    </tbody>
+                </table>
+
+                <div class="legend" id="txt-legend">
+                    ● RED: elevated baseline in raw water<br>
+                    ● GREEN: within WHO/EU/US EPA benchmarks
+                </div>
             </div>
-            <div class="metric-val">up to 200 g/L</div>
-        </div>
-    </div>
 
-    <!-- RIGHT COLUMN -->
-    <div class="col">
-        <div class="badge-row">
-            <div class="badge">WHO <div class="tt" id="tt-who">World Health Organization (WHO)</div></div>
-            <div class="badge">EU <div class="tt" id="tt-eu">European Union (EU)</div></div>
-            <div class="badge">US EPA <div class="tt" id="tt-us">U.S. Environmental Protection Agency (US EPA)</div></div>
-            <div class="badge">Lab-verified <div class="tt" id="tt-lab">Independent lab verification. Reports & protocols in Data Room after e-NDA.</div></div>
-        </div>
+            <div class="nda-note" id="txt-nda">
+                The homepage shows status-only visualization without numeric values. Full numeric tables, sampling protocols, and lab reports available in Data Room after e-NDA.
+            </div>
+        </section>
+    </main>
 
-        <h3 id="txt-table-h" style="font-size: 14px; margin-bottom: 5px; font-weight: 300;">Quality trends before/after</h3>
-        
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr><th id="th-p">Parameter</th><th id="th-r">Raw status</th><th id="th-a">After status</th></tr>
-                </thead>
-                <tbody id="table-body">
-                    <!-- Rows injected by JS -->
-                </tbody>
-            </table>
+    <footer>
+        <div class="logo-box">
+            <div class="logo-circle">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 5L15 50L50 95L85 50L50 5Z" stroke="#4AC8DC" stroke-width="2"/>
+                    <path d="M50 20C50 20 32 45 32 58C32 68 40 76 50 76C60 76 68 68 68 58C68 45 50 20 50 20Z" fill="#4AC8DC"/>
+                    <path d="M50 40C50 40 42 50 42 58C42 62 45 66 50 66C55 66 58 62 58 58C58 50 50 40 50 40Z" fill="black"/>
+                </svg>
+            </div>
+            <div class="brand-name">AQUINTAQA</div>
         </div>
-        <div class="view-more" id="txt-more" onclick="toggleTable()">View more parameters...</div>
+    </footer>
 
-        <div class="legend" id="txt-legend">
-            ● Red: elevated baseline • Green: within benchmark • Blue: above benchmark.
-        </div>
+    <script>
+        const content = {
+            en: {
+                title: "QUALITY & STANDARDS",
+                headerMicro: 'Public disclosure level: numbers shown only for safe-to-disclose "hook metrics"; status trends without values.',
+                saltH: "Salt reduction (pilot)", saltM: "representative pilot samples (chain-of-custody); feed-dependent.",
+                recH: "Product water recovery", recM: "ultra-low concentrate / reject volume (full protocols after e-NDA).",
+                clH: "Chloride (Cl⁻)", naH: "Sodium (Na⁺)",
+                raw: "Raw:", after: "After:", st: "✓ well below benchmark",
+                partH: "Particle removal", partM: "colloids / suspended matter; verified on pilot samples.",
+                salH: "Feed salinity tolerance", salM: "dissolved salts (TDS); feed-dependent.",
+                tableH: "Quality trends before/after", tableS: "Status comparison vs WHO/EU/US EPA benchmarks.",
+                thP: "Parameter", thR: "Raw status", thA: "After status",
+                legend: "● RED: elevated baseline in raw water<br>● GREEN: within WHO/EU/US EPA benchmarks",
+                nda: "The homepage shows status-only visualization without numeric values. Full numeric tables, sampling protocols, and lab reports available in Data Room after e-NDA.",
+                rows: [
+                    ["TDS (total dissolved solids)", "RED HIGH", "GREEN OK"],
+                    ["Hardness (Ca/Mg)", "RED HIGH", "GREEN OK"],
+                    ["Nitrates/nitrites", "RED HIGH", "GREEN OK"],
+                    ["Chlorides", "RED HIGH", "GREEN OK"],
+                    ["NTU (turbidity)", "RED HIGH", "GREEN OK"],
+                    ["Sulfates (SO₄²⁻)", "RED HIGH", "GREEN OK"]
+                ]
+            },
+            ru: {
+                title: "КАЧЕСТВО И СТАНДАРТЫ",
+                headerMicro: "Публичный уровень раскрытия: цифры — только безопасные для IP «hook-метрики»; таблица — статус-тренды.",
+                saltH: "Снижение солености (пилот)", saltM: "на основе репрезентативных пилотных проб; зависит от состава фида.",
+                recH: "Выход очищенной воды", recM: "минимальный объём концентрата (полные протоколы после e-NDA).",
+                clH: "Хлорид-ион (Cl⁻)", naH: "Натрий (Na⁺)",
+                raw: "Сырая:", after: "После:", st: "✓ значительно ниже ориентира",
+                partH: "Удаление частиц", partM: "коллоиды / взвеси; подтверждено пилотными пробами.",
+                salH: "Минерализация фида", salM: "по растворенным солям (TDS); зависит от фида.",
+                tableH: "Тренды качества до/после", tableS: "Сравнение с нормативами WHO/EU/US EPA.",
+                thP: "Параметр", thR: "Исходный статус", thA: "Финальный статус",
+                legend: "● КРАСНЫЙ: превышение в исходной воде<br>● ЗЕЛЕНЫЙ: в пределах норм WHO/EU/US EPA",
+                nda: "На главной странице представлена только статус-визуализация. Полные таблицы, протоколы и отчеты доступны в Data Room после e-NDA.",
+                rows: [
+                    ["TDS (общая минерализация)", "RED HIGH", "GREEN OK"],
+                    ["Жесткость (Ca/Mg)", "RED HIGH", "GREEN OK"],
+                    ["Нитраты/нитриты", "RED HIGH", "GREEN OK"],
+                    ["Хлориды", "RED HIGH", "GREEN OK"],
+                    ["NTU (мутность)", "RED HIGH", "GREEN OK"],
+                    ["Сульфаты (SO₄²⁻)", "RED HIGH", "GREEN OK"]
+                ]
+            }
+        };
 
-        <div class="nda-block" id="txt-nda">
-            The homepage shows status-only visualization without numeric values. Full before/after tables available after e-NDA.
-        </div>
-    </div>
-</main>
+        function setLang(lang) {
+            const l = content[lang];
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.toggle('active', btn.innerText.toLowerCase() === lang));
+            
+            document.getElementById('txt-title').innerText = l.title;
+            document.getElementById('txt-header-micro').innerText = l.headerMicro;
+            document.getElementById('txt-salt-h').innerText = l.saltH;
+            document.getElementById('txt-salt-m').innerText = l.saltM;
+            document.getElementById('txt-rec-h').innerText = l.recH;
+            document.getElementById('txt-rec-m').innerText = l.recM;
+            document.getElementById('txt-cl-h').innerText = l.clH;
+            document.getElementById('txt-na-h').innerText = l.naH;
+            document.getElementById('txt-raw1').innerText = l.raw; document.getElementById('txt-raw2').innerText = l.raw;
+            document.getElementById('txt-after1').innerText = l.after; document.getElementById('txt-after2').innerText = l.after;
+            document.getElementById('txt-st1').innerText = l.st; document.getElementById('txt-st2').innerText = l.st;
+            document.getElementById('txt-part-h').innerText = l.partH; document.getElementById('txt-part-m').innerText = l.partM;
+            document.getElementById('txt-sal-h').innerText = l.salH; document.getElementById('txt-sal-m').innerText = l.salM;
+            document.getElementById('txt-table-h').innerText = l.tableH;
+            document.getElementById('txt-table-s').innerText = l.tableS;
+            document.getElementById('th-p').innerText = l.thP; document.getElementById('th-r').innerText = l.thR; document.getElementById('th-a').innerText = l.thA;
+            document.getElementById('txt-legend').innerHTML = l.legend;
+            document.getElementById('txt-nda').innerText = l.nda;
 
-<footer>
-    <div class="footer-line"></div>
-    <div class="logo-wrap">
-        <div class="logo-circle">
-            <svg width="30" height="30" viewBox="0 0 40 40">
-                <path d="M20 2 L38 20 L20 38 L2 20 Z" fill="none" stroke="#4AC8DC" stroke-width="1.5"/>
-                <path d="M20 10 C20 10 14 18 14 24 C14 28 17 31 20 31 C23 31 26 28 26 24 C26 18 20 10 20 10Z" fill="#4AC8DC"/>
-            </svg>
-        </div>
-        <div class="brand">AQUINTAQA</div>
-    </div>
-</footer>
-
-<script>
-    const content = {
-        en: {
-            title: "QUALITY & STANDARDS",
-            headerMicro: 'Public disclosure level: numbers shown only for safe-to-disclose "hook metrics"; status trends without values.',
-            saltH: "Salt reduction (pilot)", saltM: "representative pilot samples (chain-of-custody); feed/config-dependent.",
-            recH: "Product water recovery", recM: "feed-dependent; ultra-low concentrate volume (full protocols after e-NDA).",
-            clH: "Chloride (Cl⁻)", naH: "Sodium (Na⁺)",
-            raw: "Raw:", after: "After:", st: "✅ well below benchmark",
-            partH: "Particle removal", partM: "colloids / suspended matter; verified on pilot samples.",
-            salH: "Feed salinity tolerance", salM: "dissolved salts (TDS); feed-dependent.",
-            ttWho: "World Health Organization (WHO)", ttEu: "European Union (EU)", ttUs: "U.S. Environmental Protection Agency (US EPA)",
-            ttLab: "Independent lab verification. Reports & protocols available after e-NDA.",
-            tableH: "Quality trends before/after",
-            thP: "Parameter", thR: "Raw status", thA: "After status",
-            more: "View more parameters...", less: "Show less",
-            legend: "● Red: elevated baseline • Green: within benchmark • Blue: above benchmark.",
-            nda: "Status-only visualization without numeric values. Full tables available in Data Room after e-NDA.",
-            rows: [
-                ["TDS (total dissolved solids)", "RED HIGH", "GREEN OK"],
-                ["Hardness (Ca/Mg)", "RED HIGH", "GREEN OK"],
-                ["Nitrates/nitrites", "RED HIGH", "GREEN OK"],
-                ["Chlorides", "RED HIGH", "GREEN OK"],
-                ["NTU (turbidity)", "RED HIGH", "GREEN OK"],
-                ["Sulfates (SO₄²⁻)", "RED HIGH", "GREEN OK"],
-                ["Alkalinity", "RED HIGH", "GREEN OK"],
-                ["Calcium/magnesium", "RED HIGH", "GREEN OK"],
-                ["Sodium", "RED HIGH", "GREEN OK"]
-            ]
-        },
-        ru: {
-            title: "КАЧЕСТВО И СТАНДАРТЫ",
-            headerMicro: "Публичный уровень раскрытия: цифры — только безопасные для IP «hook-метрики»; таблица — статус-тренды.",
-            saltH: "Снижение солевой нагрузки (pilot)", saltM: "репрезентативные пилотные пробы (chain-of-custody); зависит от фида.",
-            recH: "Выход очищенной воды", recM: "зависит от фида; минимальный объём концентрата (протоколы после e-NDA).",
-            clH: "Хлорид-ион (Cl⁻)", naH: "Натрий (Na⁺)",
-            raw: "Сырая:", after: "После:", st: "✅ ниже ориентира",
-            partH: "Удаление частиц", partM: "коллоиды / взвеси; подтверждено пилотными пробами (CoC).",
-            salH: "Допустимая минерализация фида", salM: "по растворённым солям (TDS); зависит от фида.",
-            ttWho: "Всемирная организация здравоохранения (ВОЗ)", ttEu: "Европейский союз (ЕС)", ttUs: "Агентство по охране среды США (EPA)",
-            ttLab: "Независимое подтверждение. Отчёты и протоколы доступны после e-NDA.",
-            tableH: "Тренды качества до/после",
-            thP: "Параметр", thR: "Исходная", thA: "Очищенная",
-            more: "Показать больше параметров...", less: "Свернуть",
-            legend: "● Красный: повышенный baseline • Зелёный: в норме • Синий: выше нормы.",
-            nda: "На странице только статус-визуализация. Полные таблицы до/после доступны в Data Room после e-NDA.",
-            rows: [
-                ["TDS (общая минерализация)", "RED HIGH", "GREEN OK"],
-                ["Жёсткость (Ca/Mg)", "RED HIGH", "GREEN OK"],
-                ["Нитраты/нитриты", "RED HIGH", "GREEN OK"],
-                ["Хлориды", "RED HIGH", "GREEN OK"],
-                ["NTU (мутность)", "RED HIGH", "GREEN OK"],
-                ["Сульфаты (SO₄²⁻)", "RED HIGH", "GREEN OK"],
-                ["Щёлочность", "RED HIGH", "GREEN OK"],
-                ["Кальций/магний", "RED HIGH", "GREEN OK"],
-                ["Натрий", "RED HIGH", "GREEN OK"]
-            ]
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+            l.rows.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row[0]}</td>
+                        <td><div class="status-cell"><span class="dot red"></span>${row[1]}</div></td>
+                        <td><div class="status-cell"><span class="dot green"></span>${row[2]}</div></td>
+                    </tr>
+                `;
+            });
         }
-    };
 
-    let currentLang = 'en';
-    let isExpanded = false;
-
-    function setLang(lang) {
-        currentLang = lang;
-        const l = content[lang];
-        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.toggle('active', btn.innerText.toLowerCase() === lang));
-        
-        document.getElementById('txt-title').innerText = l.title;
-        document.getElementById('txt-header-micro').innerText = l.headerMicro;
-        document.getElementById('txt-salt-h').innerText = l.saltH;
-        document.getElementById('txt-salt-m').innerText = l.saltM;
-        document.getElementById('txt-rec-h').innerText = l.recH;
-        document.getElementById('txt-rec-m').innerText = l.recM;
-        document.getElementById('txt-cl-h').innerText = l.clH;
-        document.getElementById('txt-na-h').innerText = l.naH;
-        document.getElementById('txt-raw1').innerText = l.raw; document.getElementById('txt-raw2').innerText = l.raw;
-        document.getElementById('txt-after1').innerText = l.after; document.getElementById('txt-after2').innerText = l.after;
-        document.getElementById('txt-st1').innerText = l.st; document.getElementById('txt-st2').innerText = l.st;
-        document.getElementById('txt-part-h').innerText = l.partH;
-        document.getElementById('txt-part-m').innerText = l.partM;
-        document.getElementById('txt-sal-h').innerText = l.salH;
-        document.getElementById('txt-sal-m').innerText = l.salM;
-        
-        document.getElementById('tt-who').innerText = l.ttWho; document.getElementById('tt-eu').innerText = l.ttEu;
-        document.getElementById('tt-us').innerText = l.ttUs; document.getElementById('tt-lab').innerText = l.ttLab;
-        
-        document.getElementById('txt-table-h').innerText = l.tableH;
-        document.getElementById('th-p').innerText = l.thP; document.getElementById('th-r').innerText = l.thR; document.getElementById('th-a').innerText = l.thA;
-        document.getElementById('txt-more').innerText = isExpanded ? l.less : l.more;
-        document.getElementById('txt-legend').innerText = l.legend;
-        document.getElementById('txt-nda').innerText = l.nda;
-        
-        renderTable();
-    }
-
-    function renderTable() {
-        const tbody = document.getElementById('table-body');
-        tbody.innerHTML = '';
-        const rowsToShow = isExpanded ? content[currentLang].rows : content[currentLang].rows.slice(0, 5);
-        
-        rowsToShow.forEach(row => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${row[0]}</td>
-                <td><span class="dot red"></span>${row[1]}</td>
-                <td><span class="dot green"></span>${row[2]}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-    }
-
-    function toggleTable() {
-        isExpanded = !isExpanded;
-        setLang(currentLang);
-    }
-
-    // Init
-    setLang('en');
-</script>
-
+        setLang('en');
+    </script>
 </body>
 </html>
