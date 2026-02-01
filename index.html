@@ -32,7 +32,7 @@
         .center-line {
             position: absolute;
             left: 50%;
-            top: 140px;
+            top: 100px;
             bottom: 100px;
             width: 1px;
             background: var(--line);
@@ -51,9 +51,8 @@
 
         /* --- Header --- */
         header {
-            height: 140px;
+            height: 100px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             border-bottom: 1px solid var(--line);
@@ -66,22 +65,12 @@
             letter-spacing: 8px;
             font-size: 24px;
             text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .header-micro {
-            font-size: 11px;
-            color: var(--text-dim);
-            font-style: italic;
-            text-align: center;
-            max-width: 700px;
-            line-height: 1.4;
         }
 
         .lang-switch {
             position: absolute;
             right: 40px;
-            top: 40px;
+            top: 38px;
         }
 
         .lang-btn {
@@ -209,7 +198,6 @@
             <button class="lang-btn" onclick="setLang('ru')">RU</button>
         </div>
         <h1 id="txt-title">QUALITY & STANDARDS</h1>
-        <p class="header-micro" id="txt-header-micro">Public disclosure level: numbers shown only for safe-to-disclose "hook metrics"; status trends without values.</p>
     </header>
 
     <main>
@@ -318,7 +306,6 @@
         const content = {
             en: {
                 title: "QUALITY & STANDARDS",
-                headerMicro: 'Public disclosure level: numbers shown only for safe-to-disclose "hook metrics"; status trends without values.',
                 saltH: "Salt reduction (pilot)", saltM: "representative pilot samples (chain-of-custody); feed-dependent.",
                 recH: "Product water recovery", recM: "ultra-low concentrate / reject volume (full protocols after e-NDA).",
                 clH: "Chloride (Cl⁻)", naH: "Sodium (Na⁺)",
@@ -340,7 +327,6 @@
             },
             ru: {
                 title: "КАЧЕСТВО И СТАНДАРТЫ",
-                headerMicro: "Публичный уровень раскрытия: цифры — только безопасные для IP «hook-метрики»; таблица — статус-тренды.",
                 saltH: "Снижение солености (пилот)", saltM: "на основе репрезентативных пилотных проб; зависит от состава фида.",
                 recH: "Выход очищенной воды", recM: "минимальный объём концентрата (полные протоколы после e-NDA).",
                 clH: "Хлорид-ион (Cl⁻)", naH: "Натрий (Na⁺)",
@@ -367,7 +353,6 @@
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.toggle('active', btn.innerText.toLowerCase() === lang));
             
             document.getElementById('txt-title').innerText = l.title;
-            document.getElementById('txt-header-micro').innerText = l.headerMicro;
             document.getElementById('txt-salt-h').innerText = l.saltH;
             document.getElementById('txt-salt-m').innerText = l.saltM;
             document.getElementById('txt-rec-h').innerText = l.recH;
