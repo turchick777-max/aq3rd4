@@ -4,40 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AQUINTAQA | Quality & Standards</title>
+    <!-- Подключаем шрифты: Inter для текстов и JetBrains Mono для цифр/инженерности -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #000000;
-            --line: rgba(74, 144, 164, 0.3);
+            --line: rgba(74, 144, 164, 0.25);
+            --line-bright: rgba(74, 144, 164, 0.5);
             --accent: #4AC8DC;
             --text-main: #ffffff;
             --text-dim: #888888;
-            --text-micro: #555555;
+            --text-micro: #444444;
             --green: #44cc88;
             --red: #ff4444;
+            --font-main: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             background-color: var(--bg);
+            /* Фоновая сетка чертежа */
+            background-image: 
+                linear-gradient(var(--line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--line) 1px, transparent 1px);
+            background-size: 50px 50px;
             color: var(--text-main);
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: var(--font-main);
             height: 100vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
 
-        /* --- Blueprint Layout --- */
+        /* Blueprint Layout */
         .center-line {
             position: absolute;
             left: 50%;
             top: 100px;
             bottom: 100px;
             width: 1px;
-            background: var(--line);
+            background: var(--line-bright);
             z-index: 1;
         }
+
+        .center-line::before, .center-line::after {
+            content: ''; position: absolute; left: -4px; width: 9px; height: 1px; background: var(--accent);
+        }
+        .center-line::before { top: 0; } .center-line::after { bottom: 0; }
 
         .horizontal-line {
             position: absolute;
@@ -45,32 +60,34 @@
             left: 0;
             right: 0;
             height: 1px;
-            background: var(--line);
+            background: var(--line-bright);
             z-index: 1;
         }
 
-        /* --- Header --- */
+        /* Header */
         header {
             height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-bottom: 1px solid var(--line);
+            border-bottom: 1px solid var(--line-bright);
             position: relative;
             z-index: 2;
+            background: var(--bg);
         }
 
         h1 {
-            font-weight: 300;
-            letter-spacing: 8px;
-            font-size: 24px;
+            font-weight: 200;
+            letter-spacing: 12px;
+            font-size: 22px;
             text-transform: uppercase;
         }
 
         .lang-switch {
             position: absolute;
             right: 40px;
-            top: 38px;
+            display: flex;
+            gap: 5px;
         }
 
         .lang-btn {
@@ -79,14 +96,14 @@
             color: var(--text-dim);
             padding: 4px 10px;
             cursor: pointer;
-            font-size: 11px;
+            font-size: 10px;
+            font-family: var(--font-mono);
             transition: 0.3s;
-            margin-left: 5px;
         }
 
-        .lang-btn.active { color: white; border-color: white; }
+        .lang-btn.active { color: var(--accent); border-color: var(--accent); }
 
-        /* --- Main --- */
+        /* Main Content */
         main {
             display: flex;
             flex: 1;
@@ -99,54 +116,143 @@
             padding: 40px 60px;
             display: flex;
             flex-direction: column;
+            gap: 5px;
         }
 
-        /* --- Left Side Content --- */
+        /* Инженерные уголки для блоков */
+        .tech-block {
+            position: relative;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(74, 144, 164, 0.1);
+        }
+
+        /* Metric styling */
         .metric-row {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(74, 144, 164, 0.15);
         }
 
-        .metric-label .headline { font-size: 14px; margin-bottom: 4px; color: var(--text-main); }
-        .metric-label .micro { font-size: 10px; color: var(--text-micro); line-height: 1.3; max-width: 300px; }
-        .metric-value { font-size: 28px; font-weight: 200; letter-spacing: -1px; }
+        .metric-label .headline { 
+            font-size: 12px; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            color: var(--text-dim); 
+            margin-bottom: 4px;
+        }
+        
+        .metric-label .micro { font-size: 10px; color: var(--text-micro); line-height: 1.3; max-width: 320px; }
+        
+        .metric-value { 
+            font-family: var(--font-mono); 
+            font-size: 32px; 
+            font-weight: 300; 
+            color: var(--text-main);
+        }
 
+        /* Dual Columns for Chloride/Sodium */
         .dual-metrics {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 40px;
             padding: 20px 0;
-            border-bottom: 1px solid rgba(74, 144, 164, 0.15);
+            border-bottom: 1px solid rgba(74, 144, 164, 0.1);
         }
 
-        .dual-col h3 { font-size: 12px; color: var(--text-dim); margin-bottom: 10px; font-weight: 400; text-transform: uppercase; letter-spacing: 1px; }
-        .data-point { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 3px; }
-        .val-green { color: var(--green); font-weight: 500; }
-        .status-check { color: var(--green); font-size: 11px; margin-top: 8px; display: flex; align-items: center; gap: 5px; }
+        .dual-col h3 { 
+            font-size: 11px; 
+            color: var(--accent); 
+            margin-bottom: 12px; 
+            font-weight: 400; 
+            letter-spacing: 1px;
+            font-family: var(--font-mono);
+        }
+        
+        .data-point { 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 11px; 
+            margin-bottom: 6px; 
+            font-family: var(--font-mono);
+        }
+        
+        .val-green { color: var(--green); }
+        
+        .status-check { 
+            color: var(--green); 
+            font-size: 10px; 
+            margin-top: 10px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
-        /* --- Right Side Content --- */
-        .badge-row { display: flex; gap: 10px; margin-bottom: 25px; }
-        .badge { border: 1px solid var(--line); padding: 3px 10px; font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+        /* Right Side Table */
+        .badge-row { display: flex; gap: 8px; margin-bottom: 25px; }
+        .badge { 
+            border: 1px solid var(--line); 
+            padding: 3px 8px; 
+            font-size: 9px; 
+            color: var(--text-dim); 
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+        }
 
-        h2.table-h { font-size: 18px; font-weight: 300; margin-bottom: 5px; }
-        .table-sub { font-size: 11px; color: var(--text-dim); margin-bottom: 20px; }
+        h2.table-h { 
+            font-size: 16px; 
+            font-weight: 300; 
+            margin-bottom: 15px; 
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
 
-        table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        th { text-align: left; padding: 10px 5px; color: var(--text-micro); font-weight: 400; border-bottom: 1px solid var(--line); text-transform: uppercase; font-size: 10px; }
-        td { padding: 12px 5px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th { 
+            text-align: left; 
+            padding: 10px 5px; 
+            color: var(--text-micro); 
+            font-weight: 400; 
+            border-bottom: 1px solid var(--line-bright); 
+            text-transform: uppercase; 
+            font-size: 9px; 
+            letter-spacing: 1px;
+            font-family: var(--font-mono);
+        }
+        
+        td { 
+            padding: 10px 5px; 
+            border-bottom: 1px solid rgba(255,255,255,0.03); 
+            font-size: 11px;
+        }
 
-        .status-cell { display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 11px; }
-        .dot { width: 7px; height: 7px; border-radius: 50%; }
+        .status-cell { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            font-family: var(--font-mono); 
+            font-size: 10px; 
+            letter-spacing: 0.5px;
+        }
+        
+        .dot { width: 6px; height: 6px; border-radius: 0; transform: rotate(45deg); }
         .dot.red { background: var(--red); box-shadow: 0 0 8px var(--red); }
         .dot.green { background: var(--green); box-shadow: 0 0 8px var(--green); }
 
-        .legend { font-size: 10px; color: var(--text-micro); margin-top: 20px; line-height: 1.6; }
-        .nda-note { margin-top: auto; padding: 15px 0; font-size: 11px; color: var(--text-dim); border-top: 1px solid var(--line); line-height: 1.5; }
+        .legend { font-size: 9px; font-family: var(--font-mono); color: var(--text-micro); margin-top: 15px; line-height: 1.6; }
+        
+        .nda-note { 
+            margin-top: auto; 
+            padding: 15px; 
+            font-size: 10px; 
+            color: var(--text-dim); 
+            border: 1px solid var(--line); 
+            line-height: 1.5; 
+            background: rgba(74, 144, 164, 0.03);
+        }
 
-        /* --- Footer --- */
+        /* Footer */
         footer {
             height: 100px;
             display: flex;
@@ -166,25 +272,25 @@
         }
 
         .logo-circle {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             border: 1px solid var(--accent);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             background: var(--bg);
-            box-shadow: 0 0 25px rgba(74, 200, 220, 0.2);
+            box-shadow: 0 0 20px rgba(74, 200, 220, 0.15);
         }
 
-        .logo-circle svg { width: 40px; height: 40px; }
-        .brand-name { font-size: 14px; letter-spacing: 6px; font-weight: 300; text-transform: uppercase; }
+        .logo-circle svg { width: 35px; height: 35px; }
+        .brand-name { font-size: 13px; letter-spacing: 8px; font-weight: 300; text-transform: uppercase; font-family: var(--font-main); }
 
-        /* Custom Scrollbar for Right Side */
-        .scroll-area { flex: 1; overflow-y: auto; padding-right: 10px; }
+        /* Scrollbar */
+        .scroll-area { flex: 1; overflow-y: auto; padding-right: 15px; }
         .scroll-area::-webkit-scrollbar { width: 2px; }
-        .scroll-area::-webkit-scrollbar-thumb { background: var(--line); }
+        .scroll-area::-webkit-scrollbar-thumb { background: var(--accent); }
     </style>
 </head>
 <body>
@@ -193,98 +299,105 @@
     <div class="horizontal-line"></div>
 
     <header>
+        <h1 id="txt-title">QUALITY & STANDARDS</h1>
         <div class="lang-switch">
             <button class="lang-btn active" onclick="setLang('en')">EN</button>
             <button class="lang-btn" onclick="setLang('ru')">RU</button>
         </div>
-        <h1 id="txt-title">QUALITY & STANDARDS</h1>
     </header>
 
     <main>
-        <!-- LEFT COLUMN -->
+        <!-- LEFT COLUMN: PRIMARY ANALYTICS -->
         <section class="col">
-            <div class="metric-row">
-                <div class="metric-label">
-                    <div class="headline" id="txt-salt-h">Salt reduction (pilot)</div>
-                    <div class="micro" id="txt-salt-m">based on representative pilot samples (chain-of-custody); feed-dependent.</div>
+            <div class="tech-block">
+                <div class="metric-row">
+                    <div class="metric-label">
+                        <div class="headline" id="txt-salt-h">Salt reduction (pilot)</div>
+                        <div class="micro" id="txt-salt-m">Based on representative pilot samples (chain-of-custody); system-dependent metrics.</div>
+                    </div>
+                    <div class="metric-value">~900–1500×</div>
                 </div>
-                <div class="metric-value">~900–1500×</div>
             </div>
 
-            <div class="metric-row">
-                <div class="metric-label">
-                    <div class="headline" id="txt-rec-h">Product water recovery</div>
-                    <div class="micro" id="txt-rec-m">ultra-low concentrate / reject volume (full protocols after e-NDA).</div>
+            <div class="tech-block">
+                <div class="metric-row">
+                    <div class="metric-label">
+                        <div class="headline" id="txt-rec-h">Product water recovery</div>
+                        <div class="micro" id="txt-rec-m">Recovery efficiency based on ultra-low concentrate protocols (after e-NDA).</div>
+                    </div>
+                    <div class="metric-value">up to 98%</div>
                 </div>
-                <div class="metric-value">up to 98%</div>
             </div>
 
             <div class="dual-metrics">
                 <div class="dual-col">
-                    <h3 id="txt-cl-h">Chloride (Cl⁻)</h3>
-                    <div class="data-point"><span id="txt-raw1">Raw:</span> <span>48,000 mg/L</span></div>
-                    <div class="data-point"><span id="txt-after1">After:</span> <span class="val-green">52 mg/L</span></div>
-                    <div class="status-check" id="txt-st1">✓ well below benchmark</div>
+                    <h3 id="txt-cl-h">CHLORIDE (Cl⁻)</h3>
+                    <div class="data-point"><span id="txt-raw1">RAW_SAMPLE:</span> <span>48,000 mg/L</span></div>
+                    <div class="data-point"><span id="txt-after1">POST_TREAT:</span> <span class="val-green">52 mg/L</span></div>
+                    <div class="status-check" id="txt-st1"><span>[</span> ✓ NOMINAL <span>]</span></div>
                 </div>
                 <div class="dual-col">
-                    <h3 id="txt-na-h">Sodium (Na⁺)</h3>
-                    <div class="data-point"><span id="txt-raw2">Raw:</span> <span>23,200 mg/L</span></div>
-                    <div class="data-point"><span id="txt-after2">After:</span> <span class="val-green">16 mg/L</span></div>
-                    <div class="status-check" id="txt-st2">✓ well below benchmark</div>
+                    <h3 id="txt-na-h">SODIUM (Na⁺)</h3>
+                    <div class="data-point"><span id="txt-raw2">RAW_SAMPLE:</span> <span>23,200 mg/L</span></div>
+                    <div class="data-point"><span id="txt-after2">POST_TREAT:</span> <span class="val-green">16 mg/L</span></div>
+                    <div class="status-check" id="txt-st2"><span>[</span> ✓ NOMINAL <span>]</span></div>
                 </div>
             </div>
 
-            <div class="metric-row">
-                <div class="metric-label">
-                    <div class="headline" id="txt-part-h">Particle removal</div>
-                    <div class="micro" id="txt-part-m">colloids / suspended matter; verified on pilot samples.</div>
+            <div class="tech-block">
+                <div class="metric-row">
+                    <div class="metric-label">
+                        <div class="headline" id="txt-part-h">Particle removal</div>
+                        <div class="micro" id="txt-part-m">Colloidal / suspended matter threshold; verified by pilot CoC.</div>
+                    </div>
+                    <div class="metric-value">&lt; 1 μm</div>
                 </div>
-                <div class="metric-value">&lt; 1 μm</div>
             </div>
 
-            <div class="metric-row" style="border-bottom: none;">
-                <div class="metric-label">
-                    <div class="headline" id="txt-sal-h">Feed salinity tolerance</div>
-                    <div class="micro" id="txt-sal-m">dissolved salts (TDS); feed-dependent.</div>
+            <div class="tech-block" style="border-bottom: none;">
+                <div class="metric-row">
+                    <div class="metric-label">
+                        <div class="headline" id="txt-sal-h">Feed salinity tolerance</div>
+                        <div class="micro" id="txt-sal-m">Maximum dissolved salts (TDS) operating envelope.</div>
+                    </div>
+                    <div class="metric-value">up to 200 g/L</div>
                 </div>
-                <div class="metric-value">up to 200 g/L</div>
             </div>
         </section>
 
-        <!-- RIGHT COLUMN -->
+        <!-- RIGHT COLUMN: SYSTEM TRENDS -->
         <section class="col">
             <div class="scroll-area">
                 <div class="badge-row">
-                    <div class="badge">WHO</div>
-                    <div class="badge">EU</div>
-                    <div class="badge">US EPA</div>
-                    <div class="badge">Lab-verified</div>
+                    <div class="badge">WHO_STD</div>
+                    <div class="badge">EU_COMP</div>
+                    <div class="badge">US_EPA</div>
+                    <div class="badge">LAB_CERT</div>
                 </div>
 
                 <h2 class="table-h" id="txt-table-h">Quality trends before/after</h2>
-                <p class="table-sub" id="txt-table-s">Status comparison vs WHO/EU/US EPA benchmarks.</p>
-
+                
                 <table>
                     <thead>
                         <tr>
-                            <th id="th-p">Parameter</th>
-                            <th id="th-r">Raw status</th>
-                            <th id="th-a">After status</th>
+                            <th id="th-p">SYSTEM_PARAMETER</th>
+                            <th id="th-r">RAW_STATUS</th>
+                            <th id="th-a">POST_STATUS</th>
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <!-- JS injected rows -->
+                        <!-- JS generated rows -->
                     </tbody>
                 </table>
 
                 <div class="legend" id="txt-legend">
-                    ● RED: elevated baseline in raw water<br>
-                    ● GREEN: within WHO/EU/US EPA benchmarks
+                    // RED: CRITICAL_BASELINE_DETECTED<br>
+                    // GREEN: WITHIN_BENCHMARK_ENVELOPE
                 </div>
             </div>
 
             <div class="nda-note" id="txt-nda">
-                The homepage shows status-only visualization without numeric values. Full numeric tables, sampling protocols, and lab reports available in Data Room after e-NDA.
+                SYSTEM_LOG: Homepage displays status-only visualization. Full numeric datasets, chemical analysis reports, and operating logs are encrypted and available in Data Room after e-NDA authorization.
             </div>
         </section>
     </main>
@@ -292,7 +405,7 @@
     <footer>
         <div class="logo-box">
             <div class="logo-circle">
-                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg viewBox="0 0 100 100" fill="none">
                     <path d="M50 5L15 50L50 95L85 50L50 5Z" stroke="#4AC8DC" stroke-width="2"/>
                     <path d="M50 20C50 20 32 45 32 58C32 68 40 76 50 76C60 76 68 68 68 58C68 45 50 20 50 20Z" fill="#4AC8DC"/>
                     <path d="M50 40C50 40 42 50 42 58C42 62 45 66 50 66C55 66 58 62 58 58C58 50 50 40 50 40Z" fill="black"/>
@@ -306,16 +419,16 @@
         const content = {
             en: {
                 title: "QUALITY & STANDARDS",
-                saltH: "Salt reduction (pilot)", saltM: "representative pilot samples (chain-of-custody); feed-dependent.",
-                recH: "Product water recovery", recM: "ultra-low concentrate / reject volume (full protocols after e-NDA).",
-                clH: "Chloride (Cl⁻)", naH: "Sodium (Na⁺)",
-                raw: "Raw:", after: "After:", st: "✓ well below benchmark",
-                partH: "Particle removal", partM: "colloids / suspended matter; verified on pilot samples.",
-                salH: "Feed salinity tolerance", salM: "dissolved salts (TDS); feed-dependent.",
-                tableH: "Quality trends before/after", tableS: "Status comparison vs WHO/EU/US EPA benchmarks.",
-                thP: "Parameter", thR: "Raw status", thA: "After status",
-                legend: "● RED: elevated baseline in raw water<br>● GREEN: within WHO/EU/US EPA benchmarks",
-                nda: "The homepage shows status-only visualization without numeric values. Full numeric tables, sampling protocols, and lab reports available in Data Room after e-NDA.",
+                saltH: "Salt reduction (pilot)", saltM: "Based on representative pilot samples (chain-of-custody); system-dependent metrics.",
+                recH: "Product water recovery", recM: "Recovery efficiency based on ultra-low concentrate protocols (after e-NDA).",
+                clH: "CHLORIDE (Cl⁻)", naH: "SODIUM (Na⁺)",
+                raw: "RAW_SAMPLE:", after: "POST_TREAT:", st: "[ ✓ NOMINAL ]",
+                partH: "Particle removal", partM: "Colloidal / suspended matter threshold; verified by pilot CoC.",
+                salH: "Feed salinity tolerance", salM: "Maximum dissolved salts (TDS) operating envelope.",
+                tableH: "Quality trends before/after",
+                thP: "SYSTEM_PARAMETER", thR: "RAW_STATUS", thA: "POST_STATUS",
+                legend: "// RED: CRITICAL_BASELINE_DETECTED<br>// GREEN: WITHIN_BENCHMARK_ENVELOPE",
+                nda: "SYSTEM_LOG: Homepage displays status-only visualization. Full numeric datasets and analysis reports available in Data Room after e-NDA.",
                 rows: [
                     ["TDS (total dissolved solids)", "RED HIGH", "GREEN OK"],
                     ["Hardness (Ca/Mg)", "RED HIGH", "GREEN OK"],
@@ -327,16 +440,16 @@
             },
             ru: {
                 title: "КАЧЕСТВО И СТАНДАРТЫ",
-                saltH: "Снижение солености (пилот)", saltM: "на основе репрезентативных пилотных проб; зависит от состава фида.",
-                recH: "Выход очищенной воды", recM: "минимальный объём концентрата (полные протоколы после e-NDA).",
-                clH: "Хлорид-ион (Cl⁻)", naH: "Натрий (Na⁺)",
-                raw: "Сырая:", after: "После:", st: "✓ значительно ниже ориентира",
-                partH: "Удаление частиц", partM: "коллоиды / взвеси; подтверждено пилотными пробами.",
-                salH: "Минерализация фида", salM: "по растворенным солям (TDS); зависит от фида.",
-                tableH: "Тренды качества до/после", tableS: "Сравнение с нормативами WHO/EU/US EPA.",
-                thP: "Параметр", thR: "Исходный статус", thA: "Финальный статус",
-                legend: "● КРАСНЫЙ: превышение в исходной воде<br>● ЗЕЛЕНЫЙ: в пределах норм WHO/EU/US EPA",
-                nda: "На главной странице представлена только статус-визуализация. Полные таблицы, протоколы и отчеты доступны в Data Room после e-NDA.",
+                saltH: "Снижение солености (пилот)", saltM: "На основе репрезентативных пилотных проб; системные метрики.",
+                recH: "Выход очищенной воды", recM: "Эффективность системы на основе протоколов низкого концентрата (после e-NDA).",
+                clH: "ХЛОРИД-ИОН (Cl⁻)", naH: "НАТРИЙ (Na⁺)",
+                raw: "ИСХОД_ПРОБА:", after: "ПОСЛЕ_ОЧИСТКИ:", st: "[ ✓ НОМИНАЛ ]",
+                partH: "Удаление частиц", partM: "Порог коллоидных и взвешенных частиц; подтверждено CoC.",
+                salH: "Минерализация фида", salM: "Максимальный рабочий диапазон по солесодержанию (TDS).",
+                tableH: "Тренды качества до/после",
+                thP: "ПАРАМЕТР_СИСТЕМЫ", thR: "ИСХОД_СТАТУС", thA: "ИТОГ_СТАТУС",
+                legend: "// КРАСНЫЙ: ПРЕВЫШЕНИЕ_БАЗОВОГО_УРОВНЯ<br>// ЗЕЛЕНЫЙ: В_ПРЕДЕЛАХ_НОРМАТИВА",
+                nda: "ЛОГ_СИСТЕМЫ: На главной странице представлена только статус-визуализация. Полные массивы данных и отчеты доступны в Data Room после e-NDA.",
                 rows: [
                     ["TDS (общая минерализация)", "RED HIGH", "GREEN OK"],
                     ["Жесткость (Ca/Mg)", "RED HIGH", "GREEN OK"],
@@ -357,15 +470,14 @@
             document.getElementById('txt-salt-m').innerText = l.saltM;
             document.getElementById('txt-rec-h').innerText = l.recH;
             document.getElementById('txt-rec-m').innerText = l.recM;
-            document.getElementById('txt-cl-h').innerText = l.clH;
-            document.getElementById('txt-na-h').innerText = l.naH;
+            document.getElementById('txt-cl-h').innerHTML = l.clH;
+            document.getElementById('txt-na-h').innerHTML = l.naH;
             document.getElementById('txt-raw1').innerText = l.raw; document.getElementById('txt-raw2').innerText = l.raw;
             document.getElementById('txt-after1').innerText = l.after; document.getElementById('txt-after2').innerText = l.after;
-            document.getElementById('txt-st1').innerText = l.st; document.getElementById('txt-st2').innerText = l.st;
+            document.getElementById('txt-st1').innerHTML = l.st; document.getElementById('txt-st2').innerHTML = l.st;
             document.getElementById('txt-part-h').innerText = l.partH; document.getElementById('txt-part-m').innerText = l.partM;
             document.getElementById('txt-sal-h').innerText = l.salH; document.getElementById('txt-sal-m').innerText = l.salM;
             document.getElementById('txt-table-h').innerText = l.tableH;
-            document.getElementById('txt-table-s').innerText = l.tableS;
             document.getElementById('th-p').innerText = l.thP; document.getElementById('th-r').innerText = l.thR; document.getElementById('th-a').innerText = l.thA;
             document.getElementById('txt-legend').innerHTML = l.legend;
             document.getElementById('txt-nda').innerText = l.nda;
