@@ -1,1 +1,973 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AQUINTAQA — Quality & Standards</title>
+  <style>
+    :root{
+      --bg:#000;
+      --line: rgba(74,144,164,0.35);
+      --line-strong: rgba(74,200,220,0.70);
+      --text:#fff;
+      --muted:#888;
+      --micro:#666;
+      --card: rgba(10,20,30,0.40);
+      --border: rgba(74,144,164,0.40);
+      --green:#44cc88;
+      --red:#ff4444;
+      --blue:#4488ff;
+      --glow: rgba(74,200,220,0.40);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background: var(--bg);
+      color:var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      overflow:hidden; /* IMPORTANT: no scroll on desktop */
+    }
+
+    .section{
+      height:100vh;
+      width:100%;
+      position:relative;
+      padding: 18px 22px 16px;
+      display:grid;
+      grid-template-rows: auto 1fr;
+      gap: 10px;
+    }
+
+    /* top-right language toggle */
+    .lang{
+      position:absolute;
+      top:14px; right:14px;
+      display:flex; gap:8px;
+      z-index:20;
+    }
+    .lang button{
+      border:1px solid var(--border);
+      background:transparent;
+      color:var(--muted);
+      padding:8px 10px;
+      font: 500 12px/1 Inter, system-ui, sans-serif;
+      letter-spacing: .18em;
+      text-transform:uppercase;
+      cursor:pointer;
+    }
+    .lang button[aria-pressed="true"]{
+      color:var(--text);
+      border-color: rgba(74,200,220,0.65);
+    }
+
+    /* header */
+    .header{
+      text-align:center;
+      padding-top:2px;
+    }
+    .title{
+      margin:0;
+      font-weight:300;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      font-size: clamp(20px, 2.0vw, 34px);
+    }
+    .title-underline{
+      width: min(560px, 74vw);
+      height:1px;
+      margin: 10px auto 0;
+      background: var(--line-strong);
+    }
+
+    /* blueprint canvas (everything below title) */
+    .bp{
+      position:relative;
+      width:100%;
+      height:100%;
+      /* give space for bottom logo */
+      padding-bottom: 156px;
+    }
+
+    /* center vertical line (exact middle) */
+    .center-line{
+      position:absolute;
+      left:50%;
+      top: 0px;
+      bottom: 0px;
+      width:1px;
+      background: var(--line-strong);
+      transform: translateX(-0.5px);
+      pointer-events:none;
+      z-index:1;
+    }
+
+    /* top horizontal line under title area across width (like reference) */
+    .top-line{
+      position:absolute;
+      left:0; right:0;
+      top: 40px;
+      height:1px;
+      background: var(--line);
+      pointer-events:none;
+      z-index:1;
+    }
+
+    /* left/right long lines near top (like ref “arms”) */
+    .arm-left, .arm-right{
+      position:absolute;
+      top: 72px;
+      height:1px;
+      background: var(--line-strong);
+      pointer-events:none;
+      z-index:1;
+    }
+    .arm-left{ left: 0; right: 52%; }
+    .arm-right{ left: 52%; right: 0; }
+
+    /* content columns split exactly 50/50 */
+    .cols{
+      position:relative;
+      z-index:5;
+      height:100%;
+      display:grid;
+      grid-template-columns: 50% 50%;
+      gap:0;
+      padding-top: 52px; /* aligns content below the top line zone */
+    }
+    .col{
+      padding: 0 18px;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+      min-height:0;
+    }
+
+    /* micro line: left and right aligned like reference */
+    .micro-row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      align-items:start;
+      margin-top: 6px;
+      margin-bottom: 2px;
+    }
+    .micro-left{
+      color:var(--micro);
+      font-size: 12px;
+      font-style: italic;
+      line-height: 1.35;
+      padding-left: 6px;
+      padding-right: 10px;
+      text-align:left;
+    }
+    .micro-right{
+      color:var(--micro);
+      font-size: 12px;
+      font-style: italic;
+      line-height: 1.35;
+      padding-left: 10px;
+      padding-right: 6px;
+      text-align:left;
+    }
+
+    /* badges (top-left area) */
+    .badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      padding-left:6px;
+      margin-top: 2px;
+    }
+    .badge{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px 7px 9px;
+      border:1px solid var(--border);
+      background: rgba(0,0,0,0.0);
+      color:var(--muted);
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .badge:hover{ border-color: rgba(74,200,220,0.7); color: var(--text); }
+    .badge .ico{ width:14px; height:14px; display:inline-grid; place-items:center; opacity:.9; }
+    .badge[data-tip]::after{
+      content: attr(data-tip);
+      position:absolute;
+      left:0;
+      top: calc(100% + 10px);
+      width:max-content;
+      max-width:320px;
+      white-space:normal;
+      padding:8px 10px;
+      border:1px solid var(--border);
+      background: rgba(0,0,0,0.92);
+      color: var(--muted);
+      font-size:12px;
+      letter-spacing:.02em;
+      text-transform:none;
+      opacity:0;
+      transform: translateY(-6px);
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease;
+      z-index:50;
+    }
+    .badge:hover::after{ opacity:1; transform: translateY(0); }
+
+    /* card blocks (strict, no radius/shadow) */
+    .card{
+      border:1px solid var(--border);
+      background: var(--card);
+      padding: 12px 12px;
+    }
+
+    /* Salt reduction block (left) */
+    .metric{
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px 16px;
+      align-items:start;
+    }
+    .metric h3{
+      margin:0;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+    .metric .value{
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      white-space:nowrap;
+      text-align:right;
+    }
+    .metric .desc{
+      grid-column: 1 / -1;
+      margin-top: 4px;
+      color: var(--micro);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .mini-ico{
+      grid-column: 2;
+      justify-self:end;
+      margin-top: 6px;
+      opacity: .95;
+    }
+
+    /* two small cards row (Chloride / Sodium) */
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .stat-title{
+      margin:0 0 8px;
+      font-size:14px;
+      font-weight: 700;
+      letter-spacing:.02em;
+    }
+    .kv{
+      display:grid;
+      grid-template-columns: auto 1fr;
+      gap: 6px 10px;
+      align-items:baseline;
+      font-size:13px;
+      color: var(--muted);
+    }
+    .kv b{
+      font-weight:500;
+      white-space:nowrap;
+      color: var(--muted);
+    }
+    .kv .val{ color: var(--text); }
+    .kv .after{ color: rgba(74,200,220,0.95); }
+    .ok{
+      margin-top: 10px;
+      color: var(--green);
+      font-size: 13px;
+      letter-spacing: .02em;
+    }
+
+    /* two extra metric lines with small “icons” */
+    .lines{
+      display:grid;
+      gap: 10px;
+      margin-top: 2px;
+    }
+    .line-item{
+      display:grid;
+      grid-template-columns: 18px 1fr;
+      gap: 10px;
+      align-items:start;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .chip{
+      width:18px; height:18px;
+      border:1px solid var(--border);
+      display:grid; place-items:center;
+      color: rgba(74,200,220,0.75);
+      font-size: 12px;
+    }
+
+    .disclaimer{
+      margin-top:auto;
+      padding-left:6px;
+      color: var(--micro);
+      font-size:12px;
+      font-style:italic;
+      line-height:1.35;
+    }
+
+    /* RIGHT column header */
+    .right-head h3{
+      margin:0;
+      font-size:18px;
+      font-weight:700;
+      letter-spacing:.02em;
+    }
+    .right-head p{
+      margin:6px 0 0;
+      color: var(--micro);
+      font-size:12px;
+      line-height:1.35;
+      max-width: 520px;
+    }
+
+    /* table block (right) with fixed height to fit screen */
+    .table-card{
+      border:1px solid var(--border);
+      background: var(--card);
+      padding: 0;
+      overflow:hidden;
+      flex: 1;
+      min-height: 0;
+      display:flex;
+      flex-direction:column;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size: 13px;
+    }
+    thead th{
+      text-align:left;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform:uppercase;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(74,144,164,0.22);
+    }
+    tbody td{
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(74,144,164,0.16);
+      color: var(--text);
+      vertical-align:middle;
+    }
+    tbody tr:last-child td{ border-bottom:none; }
+
+    .status{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .dot{
+      width:9px; height:9px;
+      border-radius:50%;
+      display:inline-block;
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+    .dot.red{ background: var(--red); }
+    .dot.green{ background: var(--green); }
+
+    .more{
+      border:0;
+      border-top: 1px solid rgba(74,144,164,0.22);
+      background: transparent;
+      color: var(--muted);
+      padding: 12px 12px;
+      font: 500 12px/1 Inter, system-ui, sans-serif;
+      letter-spacing: .06em;
+      cursor:pointer;
+      text-align:left;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .more:hover{ color: var(--text); }
+    .more .arrow{
+      display:inline-block;
+      transform: translateX(0);
+      transition: transform .18s ease;
+      opacity:.9;
+    }
+    .more:hover .arrow{ transform: translateX(4px); }
+
+    /* right bottom notes */
+    .legend{
+      margin-top: 8px;
+      color: var(--micro);
+      font-size:12px;
+      line-height:1.35;
+      display:grid;
+      gap:8px;
+    }
+    .legend-row{
+      display:grid;
+      grid-template-columns: 12px 1fr;
+      gap: 10px;
+      align-items:center;
+    }
+    .legend-row .dot{ width:8px; height:8px; }
+
+    .nda{
+      border:1px solid var(--border);
+      padding: 10px 12px;
+      color: var(--micro);
+      font-size:12px;
+      line-height:1.35;
+      margin-top: 8px;
+    }
+
+    /* LOGO at bottom center (inside blueprint), with diverging lines */
+    .logo-wrap{
+      position:absolute;
+      left:50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 180px;
+      height: 156px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-end;
+      z-index:10;
+    }
+    .logo-lines{
+      position:absolute;
+      left: 50%;
+      top: 58px; /* aligns with center of circle */
+      transform: translateX(-50%);
+      width: 100vw;
+      height: 1px;
+      pointer-events:none;
+      z-index:1;
+    }
+    .logo-lines::before,
+    .logo-lines::after{
+      content:"";
+      position:absolute;
+      top:0;
+      height:1px;
+      background: var(--line-strong);
+      width: calc(50vw - 92px);
+    }
+    .logo-lines::before{ right: 92px; }
+    .logo-lines::after{ left: 92px; }
+
+    .logo-circle{
+      width: 132px;
+      height: 132px;
+      border-radius:50%;
+      border:1px solid rgba(74,200,220,0.55);
+      background: rgba(10,20,30,0.25);
+      display:grid;
+      place-items:center;
+      box-shadow: 0 0 30px var(--glow);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%,100%{ box-shadow: 0 0 22px rgba(74,200,220,0.26); }
+      50%{ box-shadow: 0 0 34px rgba(74,200,220,0.52); }
+    }
+    .brand{
+      margin-top: 10px;
+      font-size: 13px;
+      letter-spacing: .28em;
+      color: var(--muted);
+      text-transform:uppercase;
+    }
+
+    /* Blueprint decorative lines like the reference skeleton */
+    .decor{
+      position:absolute;
+      left:0; top:0; right:0; bottom:156px; /* stop above logo zone */
+      pointer-events:none;
+      z-index:2;
+    }
+    .decor .l{ position:absolute; height:1px; background: var(--line-strong); opacity: .95; }
+    .decor .v{ position:absolute; width:1px; background: var(--line-strong); opacity: .95; }
+
+    /* left short stacks */
+    .decor .ls1{ left: 28px; width: 38%; top: 118px; }
+    .decor .ls2{ left: 28px; width: 38%; top: 158px; }
+    .decor .ls3{ left: 28px; width: 38%; top: 198px; }
+
+    .decor .lm1{ left: 28px; width: 16%; top: 260px; }
+    .decor .lm2{ left: 28px; width: 16%; top: 300px; }
+    .decor .lm3{ left: 28px; width: 16%; top: 340px; }
+    .decor .lm4{ left: 28px; width: 16%; top: 380px; }
+
+    .decor .rm1{ left: 22%; width: 16%; top: 260px; }
+    .decor .rm2{ left: 22%; width: 16%; top: 300px; }
+    .decor .rm3{ left: 22%; width: 16%; top: 340px; }
+    .decor .rm4{ left: 22%; width: 16%; top: 380px; }
+
+    /* left vertical in middle (like ref) */
+    .decor .lv1{ left: 20%; top: 238px; height: 172px; }
+    .decor .lv1.v{ width:1px; }
+
+    /* right big rectangle outline */
+    .decor .box{
+      position:absolute;
+      right: 28px;
+      top: 132px;
+      width: 40%;
+      height: 310px;
+      border:1px solid var(--line-strong);
+      opacity:.95;
+    }
+
+    /* bottom left/right horizontal lines above logo (like ref) */
+    .decor .b1{ left: 28px; width: 44%; top: 470px; opacity:.55; background: var(--line); }
+    .decor .b2{ right: 28px; width: 44%; top: 470px; opacity:.55; background: var(--line); }
+    .decor .b3{ left: 28px; width: 30%; top: 520px; opacity:.55; background: var(--line); }
+    .decor .b4{ right: 28px; width: 30%; top: 520px; opacity:.55; background: var(--line); }
+
+    /* simple fade-in (no scroll) */
+    .fade{
+      opacity:0;
+      transform: translateY(8px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .fade.show{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    /* RESPONSIVE: still no scroll by default; allow on very small screens */
+    @media (max-width: 980px){
+      body{ overflow:auto; }
+      .section{ height:auto; min-height:100vh; overflow:visible; }
+      .bp{ padding-bottom: 170px; }
+      .cols{ grid-template-columns: 1fr; padding-top: 52px; }
+      .center-line{ display:none; }
+      .micro-row{ grid-template-columns: 1fr; }
+      .grid2{ grid-template-columns: 1fr; }
+      .decor{ display:none; } /* on mobile keep clean */
+      .table-card{ min-height: 320px; }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="section" id="quality">
+    <div class="lang" role="group" aria-label="Language">
+      <button id="btnEn" aria-pressed="true">EN</button>
+      <button id="btnRu" aria-pressed="false">RU</button>
+    </div>
+
+    <header class="header">
+      <h1 class="title" data-i="title">QUALITY &amp; STANDARDS</h1>
+      <div class="title-underline"></div>
+    </header>
+
+    <div class="bp" id="bp">
+      <div class="center-line"></div>
+      <div class="top-line"></div>
+      <div class="arm-left"></div>
+      <div class="arm-right"></div>
+
+      <!-- blueprint skeleton like your reference -->
+      <div class="decor" aria-hidden="true">
+        <div class="l ls1"></div><div class="l ls2"></div><div class="l ls3"></div>
+
+        <div class="l lm1"></div><div class="l lm2"></div><div class="l lm3"></div><div class="l lm4"></div>
+        <div class="l rm1"></div><div class="l rm2"></div><div class="l rm3"></div><div class="l rm4"></div>
+        <div class="v lv1"></div>
+
+        <div class="box"></div>
+
+        <div class="l b1"></div><div class="l b2"></div>
+        <div class="l b3"></div><div class="l b4"></div>
+      </div>
+
+      <div class="micro-row fade" id="microRow">
+        <div class="micro-left" data-i="microLeft">
+          Public disclosure level: numbers shown only for safe-to-disclose “hook metrics”; the table shows status trends without values.
+        </div>
+        <div class="micro-right" data-i="microRight">
+          hook metrics”; ere NDA, sorry:
+        </div>
+      </div>
+
+      <div class="cols">
+        <!-- LEFT -->
+        <div class="col">
+          <div class="badges fade" id="badges">
+            <div class="badge" data-tip="World Health Organization (WHO)"><span class="ico">⚕︎</span>WHO</div>
+            <div class="badge" data-tip="European Union (EU)"><span class="ico">◻︎</span>EU</div>
+            <div class="badge" data-tip="U.S. Environmental Protection Agency (US EPA)"><span class="ico">⟡</span>US EPA</div>
+            <div class="badge" data-tip="Independent lab verification. Reports & protocols in the Data Room after e-NDA."><span class="ico">✦</span>Lab-verified</div>
+            <div class="badge" data-tip="Operating principles are not disclosed on public pages."><span class="ico">⦸</span>No process disclosure</div>
+          </div>
+
+          <div class="card fade">
+            <div class="metric">
+              <h3 data-i="saltTitle">Salt reduction (pilot)</h3>
+              <div class="value" data-i="saltValue">~900–1500×</div>
+              <div class="desc" data-i="saltDesc">
+                based on representative pilot samples (chain-of-custody); feed- and configuration-dependent.
+              </div>
+              <div class="mini-ico" aria-hidden="true" title="wave → arrow → DC">
+                <svg width="78" height="18" viewBox="0 0 78 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2 11c5 0 5-6 10-6s5 6 10 6 5-6 10-6" stroke="rgba(74,200,220,0.75)" stroke-width="1"/>
+                  <path d="M36 9h18" stroke="rgba(74,200,220,0.75)" stroke-width="1"/>
+                  <path d="M52 5l4 4-4 4" stroke="rgba(74,200,220,0.75)" stroke-width="1"/>
+                  <text x="60" y="12" fill="rgba(255,255,255,0.65)" font-size="10" font-family="Inter, system-ui">DC</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid2">
+            <div class="card fade">
+              <div class="stat-title" data-i="clTitle">Chloride (Cl⁻)</div>
+              <div class="kv">
+                <b data-i="raw">Raw sample:</b> <span class="val" id="clRaw">48,000 mg/L</span>
+                <b data-i="after">After AQUINTAQA:</b> <span class="val after" id="clAfter">52 mg/L</span>
+              </div>
+              <div class="ok" data-i="below">✓ well below benchmark</div>
+            </div>
+
+            <div class="card fade">
+              <div class="stat-title" data-i="naTitle">Sodium (Na⁺)</div>
+              <div class="kv">
+                <b data-i="raw">Raw sample:</b> <span class="val" id="naRaw">23,200 mg/L</span>
+                <b data-i="after">After AQUINTAQA:</b> <span class="val after" id="naAfter">15.5 mg/L</span>
+              </div>
+              <div class="ok" data-i="below">✓ well below benchmark</div>
+            </div>
+          </div>
+
+          <div class="card fade">
+            <div class="lines">
+              <div class="line-item">
+                <div class="chip">💧</div>
+                <div data-i="line1">Operable at dissolved salts up to <b>200 g/L</b> (feed-dependent)</div>
+              </div>
+              <div class="line-item">
+                <div class="chip">🔬</div>
+                <div data-i="line2">Effective removal of particles <b>&lt; 1 μm</b> (colloids/suspended)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="disclaimer fade" data-i="disc">
+            Figures shown are safe to disclose. Full tables, chain-of-custody, and lab reports available after e-NDA.
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="col">
+          <div class="right-head fade">
+            <h3 data-i="rtTitle">Quality trends before/after (no values)</h3>
+            <p data-i="rtDesc">
+              Status comparison vs WHO/EU/US EPA benchmarks. Full numeric tables are available in the Data Room (e-NDA).
+            </p>
+          </div>
+
+          <div class="table-card fade">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i="th1">Parameter</th>
+                  <th data-i="th2">Raw status</th>
+                  <th data-i="th3">After status</th>
+                </tr>
+              </thead>
+              <tbody id="mainRows"></tbody>
+              <tbody id="moreRows" hidden></tbody>
+            </table>
+
+            <button class="more" id="moreBtn" type="button" aria-expanded="false">
+              <span id="moreLabel" data-i="more">View more parameters... ></span>
+              <span class="arrow">&gt;</span>
+            </button>
+          </div>
+
+          <div class="legend fade">
+            <div class="legend-row"><span class="dot red"></span><span data-i="leg1">Red ↑ : elevated baseline in raw water</span></div>
+            <div class="legend-row"><span class="dot green"></span><span data-i="leg2">Green : within WHO/EU/US EPA benchmarks</span></div>
+            <div class="legend-row"><span class="dot" style="background:var(--blue)"></span><span data-i="leg3">Blue : above benchmarks (if applicable)</span></div>
+
+            <div class="nda" data-i="nda">
+              The homepage shows status-only visualization without numeric values and without disclosing operating modes.
+              Full before/after tables, sampling protocols (chain-of-custody), and lab reports available in White Paper and Data Room after e-NDA.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom centered logo + diverging lines -->
+      <div class="logo-wrap" aria-label="AQUINTAQA logo">
+        <div class="logo-lines" aria-hidden="true"></div>
+
+        <div class="logo-circle">
+          <svg width="78" height="78" viewBox="0 0 78 78" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="g1" x1="14" y1="10" x2="66" y2="70" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#4AC8DC"/><stop offset="1" stop-color="#1A5A6A"/>
+              </linearGradient>
+              <linearGradient id="g2" x1="24" y1="16" x2="56" y2="62" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#6FE3F2"/><stop offset="1" stop-color="#1A5A6A"/>
+              </linearGradient>
+            </defs>
+            <path d="M39 6 L62 20 L70 40 L62 58 L39 72 L16 58 L8 40 L16 20 Z"
+                  stroke="url(#g1)" stroke-width="2" fill="rgba(10,20,30,0.1)"/>
+            <path d="M39 6 L62 20 L39 34 L16 20 Z" fill="rgba(74,200,220,0.10)"/>
+            <path d="M16 20 L39 34 L39 72 L16 58 Z" fill="rgba(26,90,106,0.12)"/>
+            <path d="M62 20 L39 34 L39 72 L62 58 Z" fill="rgba(74,200,220,0.08)"/>
+            <path d="M39 22 C34 30 28 36 28 44 C28 52 33 58 39 58 C45 58 50 52 50 44 C50 36 44 30 39 22 Z"
+                  fill="url(#g2)" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+            <path d="M39 32 C36 37 34 40 34 44 C34 48 36.5 51 39 51 C41.5 51 44 48 44 44 C44 40 42 37 39 32 Z"
+                  fill="rgba(0,0,0,0.22)"/>
+          </svg>
+        </div>
+        <div class="brand">AQUINTAQA</div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // --- data ---
+    const rowsMain = {
+      en: [
+        "TDS (total dissolved solids)",
+        "Hardness (Ca/Mg)",
+        "Nitrates/Nitrites",
+        "Chlorides",
+        "NTU (turbidity)"
+      ],
+      ru: [
+        "TDS (общая минерализация)",
+        "Жёсткость (Ca/Mg)",
+        "Нитраты/нитриты",
+        "Хлориды",
+        "NTU (мутность)"
+      ]
+    };
+
+    const rowsMore = {
+      en: [
+        "Sulfates (SO₄²⁻)",
+        "Alkalinity",
+        "Calcium/magnesium",
+        "Sodium",
+        "Ammonium (NH₄⁺)",
+        "Color",
+        "Odor/taste (organoleptics)",
+        "Scaling tendency (indicator)",
+        "Corrosion potential (indicator)"
+      ],
+      ru: [
+        "Сульфаты (SO₄²⁻)",
+        "Щёлочность",
+        "Кальций/магний",
+        "Натрий",
+        "Аммоний (NH₄⁺)",
+        "Цветность",
+        "Запах/вкус (органолептика)",
+        "Склонность к накипи",
+        "Коррозионный потенциал"
+      ]
+    };
+
+    const i18n = {
+      en: {
+        title: "QUALITY & STANDARDS",
+        microLeft: "Public disclosure level: numbers shown only for safe-to-disclose “hook metrics”; the table shows status trends without values.",
+        microRight: "hook metrics”; ere NDA, sorry:",
+
+        saltTitle: "Salt reduction (pilot)",
+        saltValue: "~900–1500×",
+        saltDesc: "based on representative pilot samples (chain-of-custody); feed- and configuration-dependent.",
+
+        clTitle: "Chloride (Cl⁻)",
+        naTitle: "Sodium (Na⁺)",
+        raw: "Raw sample:",
+        after: "After AQUINTAQA:",
+        below: "✓ well below benchmark",
+
+        line1: "Operable at dissolved salts up to <b>200 g/L</b> (feed-dependent)",
+        line2: "Effective removal of particles <b>&lt; 1 μm</b> (colloids/suspended)",
+
+        disc: "Figures shown are safe to disclose. Full tables, chain-of-custody, and lab reports available after e-NDA.",
+
+        rtTitle: "Quality trends before/after (no values)",
+        rtDesc: "Status comparison vs WHO/EU/US EPA benchmarks. Full numeric tables are available in the Data Room (e-NDA).",
+
+        th1: "Parameter",
+        th2: "Raw status",
+        th3: "After status",
+
+        more: "View more parameters... >",
+        less: "Show fewer parameters... >",
+
+        leg1: "Red ↑ : elevated baseline in raw water",
+        leg2: "Green : within WHO/EU/US EPA benchmarks",
+        leg3: "Blue : above benchmarks (if applicable)",
+
+        nda: "The homepage shows status-only visualization without numeric values and without disclosing operating modes. Full before/after tables, sampling protocols (chain-of-custody), and lab reports available in White Paper and Data Room after e-NDA."
+      },
+      ru: {
+        title: "QUALITY & STANDARDS",
+        microLeft: "Публичный уровень раскрытия: цифры — только безопасные для IP «hook-метрики»; таблица — статус-тренды без значений.",
+        microRight: "hook-метрики; NDA, сорри:",
+
+        saltTitle: "Снижение солевой нагрузки (pilot)",
+        saltValue: "~900–1500×",
+        saltDesc: "на основе репрезентативных пилотных проб (chain-of-custody); зависит от состава фида и конфигурации.",
+
+        clTitle: "Хлорид-ион (Cl⁻)",
+        naTitle: "Натрий (Na⁺)",
+        raw: "Исходная проба:",
+        after: "После AQUINTAQA:",
+        below: "✓ значительно ниже ориентира",
+
+        line1: "Работоспособность при солесодержании до <b>200 g/L</b> (зависит от фида)",
+        line2: "Эффективное удаление частиц <b>&lt; 1 μm</b> (коллоиды/взвеси)",
+
+        disc: "Приведённые цифры безопасны для раскрытия. Полные таблицы, chain-of-custody, лабораторные отчёты доступны после e-NDA.",
+
+        rtTitle: "Тренды качества «до/после» (без значений)",
+        rtDesc: "Статус-сравнение относительно ориентиров WHO/EU/US EPA. Полные таблицы с цифрами — в Data Room (e-NDA).",
+
+        th1: "Параметр",
+        th2: "Статус (до)",
+        th3: "Статус (после)",
+
+        more: "Показать ещё ↓",
+        less: "Скрыть дополнительные ↑",
+
+        leg1: "красный — повышенный baseline в исходной воде",
+        leg2: "зелёный — в пределах ориентиров WHO/EU/US EPA",
+        leg3: "синий — выше ориентиров (при необходимости)",
+
+        nda: "На главной странице публикуется только статус-визуализация — без числовых значений и без раскрытия операционных режимов. Полные таблицы «до/после», протоколы отбора проб (chain-of-custody), и лабораторные отчёты доступны в White Paper и Data Room после e-NDA."
+      }
+    };
+
+    const nums = {
+      en: { clRaw:"48,000 mg/L", clAfter:"52 mg/L", naRaw:"23,200 mg/L", naAfter:"15.5 mg/L" },
+      ru: { clRaw:"48\u202f000 mg/L", clAfter:"52 mg/L", naRaw:"23\u202f200 mg/L", naAfter:"15.5 mg/L" }
+    };
+
+    let lang = "en";
+    let expanded = false;
+
+    function statusRow(label){
+      return `
+        <tr>
+          <td>${label}</td>
+          <td><span class="status"><span class="dot red"></span>HIGH</span></td>
+          <td><span class="status"><span class="dot green"></span>OK</span></td>
+        </tr>
+      `;
+    }
+
+    function buildTable(){
+      const main = document.getElementById("mainRows");
+      const more = document.getElementById("moreRows");
+      main.innerHTML = rowsMain[lang].map(statusRow).join("");
+      more.innerHTML = rowsMore[lang].map(statusRow).join("");
+      more.hidden = !expanded;
+    }
+
+    function applyI18n(){
+      document.querySelectorAll("[data-i]").forEach(el=>{
+        const key = el.getAttribute("data-i");
+        const val = i18n[lang][key];
+        if(val == null) return;
+        // allow small html in line1/line2
+        if(key === "line1" || key === "line2") el.innerHTML = val;
+        else el.textContent = val;
+      });
+
+      // numbers formatting
+      document.getElementById("clRaw").textContent = nums[lang].clRaw;
+      document.getElementById("clAfter").textContent = nums[lang].clAfter;
+      document.getElementById("naRaw").textContent = nums[lang].naRaw;
+      document.getElementById("naAfter").textContent = nums[lang].naAfter;
+
+      // tooltips (RU versions)
+      const b = document.querySelectorAll("#badges .badge");
+      if(b.length>=5){
+        b[0].setAttribute("data-tip", lang==="ru" ? "Всемирная организация здравоохранения (ВОЗ)" : "World Health Organization (WHO)");
+        b[1].setAttribute("data-tip", lang==="ru" ? "Европейский союз (ЕС)" : "European Union (EU)");
+        b[2].setAttribute("data-tip", lang==="ru" ? "Агентство по охране окружающей среды США (EPA)" : "U.S. Environmental Protection Agency (US EPA)");
+        b[3].setAttribute("data-tip", lang==="ru"
+          ? "Независимое лабораторное подтверждение. Отчёты и протоколы — в Data Room после e-NDA."
+          : "Independent lab verification. Reports & protocols in the Data Room after e-NDA."
+        );
+        b[4].setAttribute("data-tip", lang==="ru"
+          ? "Операционные принципы не раскрываются на публичных страницах."
+          : "Operating principles are not disclosed on public pages."
+        );
+      }
+
+      // more btn label
+      document.getElementById("moreLabel").textContent = expanded ? i18n[lang].less : i18n[lang].more;
+    }
+
+    // toggle more
+    const moreBtn = document.getElementById("moreBtn");
+    const moreLabel = document.getElementById("moreLabel");
+    moreBtn.addEventListener("click", ()=>{
+      expanded = !expanded;
+      document.getElementById("moreRows").hidden = !expanded;
+      moreBtn.setAttribute("aria-expanded", String(expanded));
+      moreLabel.textContent = expanded ? i18n[lang].less : i18n[lang].more;
+    });
+
+    // language buttons
+    const btnEn = document.getElementById("btnEn");
+    const btnRu = document.getElementById("btnRu");
+    function setLang(next){
+      lang = next;
+      btnEn.setAttribute("aria-pressed", String(lang==="en"));
+      btnRu.setAttribute("aria-pressed", String(lang==="ru"));
+      buildTable();
+      applyI18n();
+    }
+    btnEn.addEventListener("click", ()=>setLang("en"));
+    btnRu.addEventListener("click", ()=>setLang("ru"));
+
+    // simple reveal
+    function reveal(){
+      document.querySelectorAll(".fade").forEach((el,i)=>{
+        setTimeout(()=>el.classList.add("show"), 80 + i*60);
+      });
+    }
+
+    // init
+    buildTable();
+    applyI18n();
+    reveal();
+  </script>
+</body>
+</html>
 
