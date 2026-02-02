@@ -429,9 +429,10 @@
                 <table>
                     <thead>
                         <tr>
-                            <th id="th-p">SYSTEM_PARAMETER</th>
-                            <th id="th-r">RAW_STATUS</th>
-                            <th id="th-a">POST_STATUS</th>
+                            <th id="th-p">Parameter</th>
+                            <th id="th-r">Raw (status)</th>
+                            <th id="th-a">After (status)</th>
+                            <th id="th-b">Benchmark: WHO / EU / US EPA</th>
                         </tr>
                     </thead>
                     <tbody id="table-body">
@@ -472,7 +473,7 @@
                 partH: "Particle removal", partM: "colloids / suspended matter; verified on pilot samples (chain-of-custody).",
                 salH: "Feed salinity tolerance", salM: "dissolved salts (TDS); feed-dependent.",
                 tableH: "Quality trends before/after",
-                thP: "SYSTEM_PARAMETER", thR: "RAW_STATUS", thA: "POST_STATUS",
+                thP: "Parameter", thR: "Raw (status)", thA: "After (status)", thB: "Benchmark: WHO / EU / US EPA",
                 legend: "// RED: CRITICAL_BASELINE_DETECTED<br>// GREEN: WITHIN_BENCHMARK_ENVELOPE",
                 nda: "SYSTEM_LOG: Homepage displays status-only visualization. Full numeric datasets and analysis reports available in Data Room after e-NDA.",
                 rows: [
@@ -481,7 +482,15 @@
                     ["Nitrates/nitrites", "RED HIGH", "GREEN OK"],
                     ["Chlorides", "RED HIGH", "GREEN OK"],
                     ["NTU (turbidity)", "RED HIGH", "GREEN OK"],
-                    ["Sulfates (SO₄²⁻)", "RED HIGH", "GREEN OK"]
+                    ["Sulfates (SO₄²⁻)", "RED HIGH", "GREEN OK"],
+                    ["Alkalinity", "RED HIGH", "GREEN OK"],
+                    ["Calcium/magnesium", "RED HIGH", "GREEN OK"],
+                    ["Sodium", "RED HIGH", "GREEN OK"],
+                    ["Ammonium (NH₄⁺)", "RED HIGH", "GREEN OK"],
+                    ["Color", "RED HIGH", "GREEN OK"],
+                    ["Odor/taste (organoleptics)", "RED HIGH", "GREEN OK"],
+                    ["Scaling tendency (indicator)", "RED HIGH", "GREEN OK"],
+                    ["Corrosion potential (indicator)", "RED HIGH", "GREEN OK"]
                 ]
             },
             ru: {
@@ -497,16 +506,24 @@
                 partH: "Удаление частиц", partM: "коллоиды / взвеси; подтверждено пилотными пробами (chain-of-custody).",
                 salH: "Минерализация фида", salM: "по растворённым солям (TDS); зависит от состава фида (feed-dependent).",
                 tableH: "Тренды качества до/после",
-                thP: "ПАРАМЕТР_СИСТЕМЫ", thR: "ИСХОД_СТАТУС", thA: "ИТОГ_СТАТУС",
+                thP: "Parameter", thR: "Raw (status)", thA: "After (status)", thB: "Benchmark: WHO / EU / US EPA",
                 legend: "// КРАСНЫЙ: ПРЕВЫШЕНИЕ_БАЗОВОГО_УРОВНЯ<br>// ЗЕЛЕНЫЙ: В_ПРЕДЕЛАХ_НОРМАТИВА",
                 nda: "ЛОГ_СИСТЕМЫ: На главной странице представлена только статус-визуализация. Полные массивы данных и отчеты доступны в Data Room после e-NDA.",
                 rows: [
                     ["TDS (общая минерализация)", "RED HIGH", "GREEN OK"],
-                    ["Жесткость (Ca/Mg)", "RED HIGH", "GREEN OK"],
+                    ["Жёсткость (Ca/Mg)", "RED HIGH", "GREEN OK"],
                     ["Нитраты/нитриты", "RED HIGH", "GREEN OK"],
                     ["Хлориды", "RED HIGH", "GREEN OK"],
                     ["NTU (мутность)", "RED HIGH", "GREEN OK"],
-                    ["Сульфаты (SO₄²⁻)", "RED HIGH", "GREEN OK"]
+                    ["Сульфаты (SO₄²⁻)", "RED HIGH", "GREEN OK"],
+                    ["Щёлочность", "RED HIGH", "GREEN OK"],
+                    ["Кальций/магний", "RED HIGH", "GREEN OK"],
+                    ["Натрий", "RED HIGH", "GREEN OK"],
+                    ["Аммоний (NH₄⁺)", "RED HIGH", "GREEN OK"],
+                    ["Цветность", "RED HIGH", "GREEN OK"],
+                    ["Запах/вкус (органолептика)", "RED HIGH", "GREEN OK"],
+                    ["Склонность к накипи (indicator)", "RED HIGH", "GREEN OK"],
+                    ["Коррозионный потенциал (indicator)", "RED HIGH", "GREEN OK"]
                 ]
             }
         };
@@ -539,7 +556,10 @@
             document.getElementById('txt-part-h').innerText = l.partH; document.getElementById('txt-part-m').innerText = l.partM;
             document.getElementById('txt-sal-h').innerText = l.salH; document.getElementById('txt-sal-m').innerText = l.salM;
             document.getElementById('txt-table-h').innerText = l.tableH;
-            document.getElementById('th-p').innerText = l.thP; document.getElementById('th-r').innerText = l.thR; document.getElementById('th-a').innerText = l.thA;
+            document.getElementById('th-p').innerText = l.thP; 
+            document.getElementById('th-r').innerText = l.thR; 
+            document.getElementById('th-a').innerText = l.thA;
+            document.getElementById('th-b').innerText = l.thB;
             document.getElementById('txt-legend').innerHTML = l.legend;
             document.getElementById('txt-nda').innerText = l.nda;
 
@@ -551,6 +571,7 @@
                         <td>${row[0]}</td>
                         <td><div class="status-cell"><span class="dot red"></span>${row[1]}</div></td>
                         <td><div class="status-cell"><span class="dot green"></span>${row[2]}</div></td>
+                        <td></td>
                     </tr>
                 `;
             });
