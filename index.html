@@ -43,7 +43,7 @@
             position: absolute;
             left: 50%;
             top: 100px;
-            bottom: 100px;
+            bottom: 130px;
             width: 1px;
             background: var(--line-bright);
             z-index: 1;
@@ -56,7 +56,7 @@
 
         .horizontal-line {
             position: absolute;
-            bottom: 100px;
+            bottom: 130px;
             left: 0;
             right: 0;
             height: 1px;
@@ -254,7 +254,7 @@
 
         /* Footer */
         footer {
-            height: 100px;
+            height: 130px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -272,19 +272,19 @@
         }
 
         .logo-circle {
-            width: 70px;
-            height: 70px;
-            border: 1px solid var(--accent);
+            width: 80px;
+            height: 80px;
+            border: 1px solid rgba(255,255,255,0.3);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 8px;
-            background: var(--bg);
-            box-shadow: 0 0 20px rgba(74, 200, 220, 0.15);
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #0a1628 0%, #0d1f3c 100%);
+            box-shadow: 0 0 25px rgba(74, 200, 220, 0.15);
         }
 
-        .logo-circle svg { width: 35px; height: 35px; }
+        .logo-circle svg { width: 50px; height: 50px; }
         .brand-name { font-size: 13px; letter-spacing: 8px; font-weight: 300; text-transform: uppercase; font-family: var(--font-main); }
 
         /* Scrollbar */
@@ -405,10 +405,11 @@
     <footer>
         <div class="logo-box">
             <div class="logo-circle">
-                <svg viewBox="0 0 100 100" fill="none">
-                    <path d="M50 5L15 50L50 95L85 50L50 5Z" stroke="#4AC8DC" stroke-width="2"/>
-                    <path d="M50 20C50 20 32 45 32 58C32 68 40 76 50 76C60 76 68 68 68 58C68 45 50 20 50 20Z" fill="#4AC8DC"/>
-                    <path d="M50 40C50 40 42 50 42 58C42 62 45 66 50 66C55 66 58 62 58 58C58 50 50 40 50 40Z" fill="black"/>
+                <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Белая ромбовидная форма -->
+                    <path d="M50 5 L15 55 L50 105 L85 55 L50 5Z" fill="white"/>
+                    <!-- Капля внутри (негативное пространство) -->
+                    <ellipse cx="50" cy="58" rx="12" ry="16" fill="#0d1f3c"/>
                 </svg>
             </div>
             <div class="brand-name">AQUINTAQA</div>
