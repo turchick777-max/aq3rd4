@@ -537,10 +537,6 @@
                     red = elevated baseline • green = within benchmark • blue = above benchmark. Full before/after tables, methods & reports after e-NDA (Data Room).
                 </div>
             </div>
-
-            <div class="nda-note" id="txt-nda">
-                SYSTEM_LOG: Homepage displays status-only visualization. Full numeric datasets, chemical analysis reports, and operating logs are encrypted and available in Data Room after e-NDA authorization.
-            </div>
         </section>
     </main>
 
@@ -570,7 +566,6 @@
                 thP: "Parameter", thR: "Raw (status)", thA: "After (status)", thB: "Benchmark: WHO / EU / US EPA",
                 tableLabel: "Trends: public status view (no numbers)",
                 tableNotes: "red = elevated baseline • green = within benchmark • blue = above benchmark. Full before/after tables, methods & reports after e-NDA (Data Room).",
-                nda: "SYSTEM_LOG: Homepage displays status-only visualization. Full numeric datasets and analysis reports available in Data Room after e-NDA.",
                 rows: [
                     ["TDS (total dissolved solids)", "RED HIGH", "GREEN OK"],
                     ["Hardness (Ca/Mg)", "RED HIGH", "GREEN OK"],
@@ -606,7 +601,6 @@
                 thP: "Parameter", thR: "Raw (status)", thA: "After (status)", thB: "Benchmark: WHO / EU / US EPA",
                 tableLabel: "Trends: public status view (no numbers)",
                 tableNotes: "red = повышенный baseline • green = в пределах ориентира • blue = выше ориентира. Полные \"до/после\" таблицы, методики и отчёты — после e-NDA (Data Room).",
-                nda: "ЛОГ_СИСТЕМЫ: На главной странице представлена только статус-визуализация. Полные массивы данных и отчеты доступны в Data Room после e-NDA.",
                 rows: [
                     ["TDS (общая минерализация)", "RED HIGH", "GREEN OK"],
                     ["Жёсткость (Ca/Mg)", "RED HIGH", "GREEN OK"],
@@ -665,7 +659,6 @@
             document.getElementById('th-b').innerText = l.thB;
             document.getElementById('txt-table-label').innerText = l.tableLabel;
             document.getElementById('txt-table-notes').innerText = l.tableNotes;
-            document.getElementById('txt-nda').innerText = l.nda;
 
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
