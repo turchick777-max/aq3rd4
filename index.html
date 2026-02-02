@@ -206,6 +206,44 @@
             color: var(--text-dim); 
             font-family: var(--font-mono);
             text-transform: uppercase;
+            position: relative;
+            cursor: help;
+            transition: all 0.3s ease;
+        }
+
+        .badge:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .badge::after {
+            content: attr(data-tooltip-en);
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 20, 35, 0.95);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            border: 1px solid var(--accent);
+            z-index: 100;
+            font-family: var(--font-main);
+            text-transform: none;
+            letter-spacing: 0.5px;
+        }
+
+        .badge:hover::after {
+            opacity: 1;
+        }
+
+        body.lang-ru .badge::after {
+            content: attr(data-tooltip-ru);
         }
 
         h2.table-h { 
@@ -369,10 +407,10 @@
         <section class="col">
             <div class="scroll-area">
                 <div class="badge-row">
-                    <div class="badge">WHO_STD</div>
-                    <div class="badge">EU_COMP</div>
-                    <div class="badge">US_EPA</div>
-                    <div class="badge">LAB_CERT</div>
+                    <div class="badge" data-tooltip-en="World Health Organization (WHO)" data-tooltip-ru="Всемирная организация здравоохранения (ВОЗ)">WHO_STD</div>
+                    <div class="badge" data-tooltip-en="European Union (EU)" data-tooltip-ru="Европейский союз (ЕС)">EU_COMP</div>
+                    <div class="badge" data-tooltip-en="U.S. Environmental Protection Agency (US EPA)" data-tooltip-ru="Агентство по охране окружающей среды США (EPA)">US_EPA</div>
+                    <div class="badge" data-tooltip-en="Independent lab verification. Reports & protocols in the Data Room after e-NDA." data-tooltip-ru="Независимое лабораторное подтверждение. Отчёты и протоколы — в Data Room после e-NDA.">LAB_CERT</div>
                 </div>
 
                 <h2 class="table-h" id="txt-table-h">Quality trends before/after</h2>
@@ -465,6 +503,9 @@
         function setLang(lang) {
             const l = content[lang];
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.toggle('active', btn.innerText.toLowerCase() === lang));
+            
+            // Update body class for tooltips
+            document.body.className = lang === 'ru' ? 'lang-ru' : 'lang-en';
             
             document.getElementById('txt-title').innerText = l.title;
             document.getElementById('txt-salt-h').innerText = l.saltH;
