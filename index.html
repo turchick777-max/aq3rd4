@@ -182,11 +182,12 @@
             color: var(--green); 
             font-size: 10px; 
             margin-top: 10px; 
-            text-transform: uppercase; 
-            letter-spacing: 1px;
+            text-transform: lowercase;
+            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
+            font-family: var(--font-main);
         }
 
         /* Right Side Table */
@@ -321,15 +322,17 @@
             <div class="dual-metrics">
                 <div class="dual-col">
                     <h3 id="txt-cl-h">CHLORIDE (Cl⁻)</h3>
-                    <div class="data-point"><span id="txt-raw1">RAW_SAMPLE:</span> <span>48,000 mg/L</span></div>
-                    <div class="data-point"><span id="txt-after1">POST_TREAT:</span> <span class="val-green">52 mg/L</span></div>
-                    <div class="status-check" id="txt-st1"><span>[</span> ✓ NOMINAL <span>]</span></div>
+                    <div class="data-point"><span id="txt-raw1">Raw:</span> <span id="txt-raw1-val">48,000 mg/L</span></div>
+                    <div class="data-point"><span id="txt-after1">After:</span> <span class="val-green">52 mg/L</span></div>
+                    <div class="data-point"><span id="txt-guide1">Guideline (WHO/EU/US EPA):</span> <span>≤ 350 mg/L</span></div>
+                    <div class="status-check" id="txt-st1">✅ <span id="txt-st1-text">below guideline</span></div>
                 </div>
                 <div class="dual-col">
                     <h3 id="txt-na-h">SODIUM (Na⁺)</h3>
-                    <div class="data-point"><span id="txt-raw2">RAW_SAMPLE:</span> <span>23,200 mg/L</span></div>
-                    <div class="data-point"><span id="txt-after2">POST_TREAT:</span> <span class="val-green">16 mg/L</span></div>
-                    <div class="status-check" id="txt-st2"><span>[</span> ✓ NOMINAL <span>]</span></div>
+                    <div class="data-point"><span id="txt-raw2">Raw:</span> <span id="txt-raw2-val">23,200 mg/L</span></div>
+                    <div class="data-point"><span id="txt-after2">After:</span> <span class="val-green">16 mg/L</span></div>
+                    <div class="data-point"><span id="txt-guide2">Guideline (WHO):</span> <span>≤ 200 mg/L</span></div>
+                    <div class="status-check" id="txt-st2">✅ <span id="txt-st2-text">below guideline</span></div>
                 </div>
             </div>
 
@@ -404,7 +407,10 @@
                 saltH: "Salt reduction (pilot)", saltM: "representative pilot samples (chain-of-custody); feed/config-dependent.",
                 recH: "Product water recovery", recM: "feed-dependent; ultra-low concentrate / reject volume (full protocols after e-NDA).",
                 clH: "CHLORIDE (Cl⁻)", naH: "SODIUM (Na⁺)",
-                raw: "RAW_SAMPLE:", after: "POST_TREAT:", st: "[ ✓ NOMINAL ]",
+                raw: "Raw:", after: "After:",
+                raw1Val: "48,000 mg/L", raw2Val: "23,200 mg/L",
+                guide1: "Guideline (WHO/EU/US EPA):", guide2: "Guideline (WHO):",
+                st1: "below guideline", st2: "below guideline",
                 partH: "Particle removal", partM: "Colloidal / suspended matter threshold; verified by pilot CoC.",
                 salH: "Feed salinity tolerance", salM: "Maximum dissolved salts (TDS) operating envelope.",
                 tableH: "Quality trends before/after",
@@ -425,7 +431,10 @@
                 saltH: "Снижение солености (пилот)", saltM: "репрезентативные пилотные пробы (chain-of-custody); зависит от фида/конфига.",
                 recH: "Выход очищенной воды", recM: "зависит от фида; сверхнизкий концентрат / объём отброса (полные протоколы после e-NDA).",
                 clH: "ХЛОРИД-ИОН (Cl⁻)", naH: "НАТРИЙ (Na⁺)",
-                raw: "ИСХОД_ПРОБА:", after: "ПОСЛЕ_ОЧИСТКИ:", st: "[ ✓ НОМИНАЛ ]",
+                raw: "Raw:", after: "After:",
+                raw1Val: "48 000 mg/L", raw2Val: "23 200 mg/L",
+                guide1: "Guideline (WHO/EU/US EPA):", guide2: "Guideline (WHO):",
+                st1: "ниже ориентира", st2: "ниже ориентира",
                 partH: "Удаление частиц", partM: "Порог коллоидных и взвешенных частиц; подтверждено CoC.",
                 salH: "Минерализация фида", salM: "Максимальный рабочий диапазон по солесодержанию (TDS).",
                 tableH: "Тренды качества до/после",
@@ -454,9 +463,16 @@
             document.getElementById('txt-rec-m').innerText = l.recM;
             document.getElementById('txt-cl-h').innerHTML = l.clH;
             document.getElementById('txt-na-h').innerHTML = l.naH;
-            document.getElementById('txt-raw1').innerText = l.raw; document.getElementById('txt-raw2').innerText = l.raw;
-            document.getElementById('txt-after1').innerText = l.after; document.getElementById('txt-after2').innerText = l.after;
-            document.getElementById('txt-st1').innerHTML = l.st; document.getElementById('txt-st2').innerHTML = l.st;
+            document.getElementById('txt-raw1').innerText = l.raw; 
+            document.getElementById('txt-raw2').innerText = l.raw;
+            document.getElementById('txt-raw1-val').innerText = l.raw1Val;
+            document.getElementById('txt-raw2-val').innerText = l.raw2Val;
+            document.getElementById('txt-after1').innerText = l.after; 
+            document.getElementById('txt-after2').innerText = l.after;
+            document.getElementById('txt-guide1').innerText = l.guide1;
+            document.getElementById('txt-guide2').innerText = l.guide2;
+            document.getElementById('txt-st1-text').innerText = l.st1; 
+            document.getElementById('txt-st2-text').innerText = l.st2;
             document.getElementById('txt-part-h').innerText = l.partH; document.getElementById('txt-part-m').innerText = l.partM;
             document.getElementById('txt-sal-h').innerText = l.salH; document.getElementById('txt-sal-m').innerText = l.salM;
             document.getElementById('txt-table-h').innerText = l.tableH;
