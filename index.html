@@ -216,45 +216,38 @@
             color: var(--accent);
         }
 
-        .badge::after {
-            content: attr(data-tooltip-en);
+        .tooltip {
             position: absolute;
-            bottom: calc(100% + 10px);
+            bottom: calc(100% + 12px);
             left: 50%;
-            transform: translateX(-50%) scale(0.95);
+            transform: translateX(-50%);
             background: #0a1420;
             color: var(--text-main);
             padding: 10px 14px;
             border-radius: 4px;
             font-size: 10px;
             white-space: normal;
-            max-width: 250px;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.2s ease;
+            max-width: 280px;
             border: 1px solid var(--accent);
-            z-index: 1000;
+            z-index: 9999;
             font-family: var(--font-main);
             text-transform: none;
             letter-spacing: 0.5px;
             line-height: 1.4;
-            box-shadow: 0 4px 20px rgba(74, 200, 220, 0.3);
+            box-shadow: 0 4px 20px rgba(74, 200, 220, 0.4);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
         }
 
-        .badge:hover::after {
+        .tooltip.show {
             opacity: 1;
-            transform: translateX(-50%) scale(1);
         }
 
-        body.lang-ru .badge::after {
-            content: attr(data-tooltip-ru);
-        }
-
-        /* Tooltip arrow */
-        .badge::before {
+        .tooltip::before {
             content: '';
             position: absolute;
-            bottom: calc(100% + 2px);
+            top: 100%;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
@@ -262,14 +255,6 @@
             border-left: 6px solid transparent;
             border-right: 6px solid transparent;
             border-top: 6px solid var(--accent);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
-            z-index: 1000;
-        }
-
-        .badge:hover::before {
-            opacity: 1;
         }
 
         h2.table-h { 
@@ -572,6 +557,44 @@
         }
 
         setLang('en');
+
+        // Tooltips for badges
+        let currentLang = 'en';
+        const badges = document.querySelectorAll('.badge');
+        
+        badges.forEach(badge => {
+            let tooltip = null;
+
+            badge.addEventListener('mouseenter', () => {
+                const text = currentLang === 'ru' ? badge.getAttribute('data-tooltip-ru') : badge.getAttribute('data-tooltip-en');
+                
+                tooltip = document.createElement('div');
+                tooltip.className = 'tooltip';
+                tooltip.textContent = text;
+                badge.appendChild(tooltip);
+                
+                setTimeout(() => tooltip.classList.add('show'), 10);
+            });
+
+            badge.addEventListener('mouseleave', () => {
+                if (tooltip) {
+                    tooltip.classList.remove('show');
+                    setTimeout(() => {
+                        if (tooltip && tooltip.parentNode) {
+                            tooltip.parentNode.removeChild(tooltip);
+                        }
+                        tooltip = null;
+                    }, 200);
+                }
+            });
+        });
+
+        // Update currentLang when language changes
+        const originalSetLang = setLang;
+        setLang = function(lang) {
+            currentLang = lang;
+            originalSetLang(lang);
+        };
     </script>
 </body>
 </html>
