@@ -297,6 +297,48 @@
         .dot.red { background: var(--red); box-shadow: 0 0 8px var(--red); }
         .dot.green { background: var(--green); box-shadow: 0 0 8px var(--green); }
 
+        .expand-btn {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--line);
+            color: var(--text-dim);
+            padding: 8px 12px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            font-size: 10px;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .expand-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .expand-arrow {
+            font-size: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .expand-btn.expanded .expand-arrow {
+            transform: rotate(180deg);
+        }
+
+        tbody tr.hidden-row {
+            display: none;
+        }
+
+        tbody tr.hidden-row.show {
+            display: table-row;
+        }
+
         .legend { font-size: 9px; font-family: var(--font-mono); color: var(--text-micro); margin-top: 15px; line-height: 1.6; }
         
         .nda-note { 
@@ -440,6 +482,11 @@
                     </tbody>
                 </table>
 
+                <button class="expand-btn" id="expand-btn" onclick="toggleTableRows()">
+                    <span id="expand-btn-text">Show more parameters</span>
+                    <span class="expand-arrow" id="expand-arrow">▼</span>
+                </button>
+
                 <div class="legend" id="txt-legend">
                     // RED: CRITICAL_BASELINE_DETECTED<br>
                     // GREEN: WITHIN_BENCHMARK_ENVELOPE
@@ -470,6 +517,8 @@
                 guide1: "Guideline (WHO/EU/US EPA):", guide2: "Guideline (WHO/EU/US EPA):",
                 st1: "below guideline", st2: "below guideline",
                 dualLegend: "Raw — raw sample • After — after AQUINTAQA • Guideline — WHO/EU/US EPA benchmark",
+                expandBtn: "Show more parameters",
+                collapseBtn: "Show less",
                 partH: "Particle removal", partM: "colloids / suspended matter; verified on pilot samples (chain-of-custody).",
                 salH: "Feed salinity tolerance", salM: "dissolved salts (TDS); feed-dependent.",
                 tableH: "Quality trends before/after",
@@ -503,6 +552,8 @@
                 guide1: "Guideline (WHO/EU/US EPA):", guide2: "Guideline (WHO/EU/US EPA):",
                 st1: "ниже ориентира", st2: "ниже ориентира",
                 dualLegend: "Raw — исходная проба • After — после AQUINTAQA • Guideline — ориентир WHO/EU/US EPA",
+                expandBtn: "Показать больше параметров",
+                collapseBtn: "Свернуть",
                 partH: "Удаление частиц", partM: "коллоиды / взвеси; подтверждено пилотными пробами (chain-of-custody).",
                 salH: "Минерализация фида", salM: "по растворённым солям (TDS); зависит от состава фида (feed-dependent).",
                 tableH: "Тренды качества до/после",
@@ -553,6 +604,14 @@
             document.getElementById('txt-st1-text').innerText = l.st1; 
             document.getElementById('txt-st2-text').innerText = l.st2;
             document.getElementById('txt-dual-legend').innerText = l.dualLegend;
+            
+            // Update expand button text
+            const expandBtn = document.getElementById('expand-btn');
+            if (expandBtn && !expandBtn.classList.contains('expanded')) {
+                document.getElementById('expand-btn-text').innerText = l.expandBtn;
+            } else if (expandBtn) {
+                document.getElementById('expand-btn-text').innerText = l.collapseBtn;
+            }
             document.getElementById('txt-part-h').innerText = l.partH; document.getElementById('txt-part-m').innerText = l.partM;
             document.getElementById('txt-sal-h').innerText = l.salH; document.getElementById('txt-sal-m').innerText = l.salM;
             document.getElementById('txt-table-h').innerText = l.tableH;
@@ -565,9 +624,10 @@
 
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
-            l.rows.forEach(row => {
+            l.rows.forEach((row, index) => {
+                const hiddenClass = index >= 6 ? ' hidden-row' : '';
                 tbody.innerHTML += `
-                    <tr>
+                    <tr class="table-row${hiddenClass}">
                         <td>${row[0]}</td>
                         <td><div class="status-cell"><span class="dot red"></span>${row[1]}</div></td>
                         <td><div class="status-cell"><span class="dot green"></span>${row[2]}</div></td>
@@ -578,6 +638,26 @@
         }
 
         let currentLang = 'en';
+
+        // Toggle table rows
+        function toggleTableRows() {
+            const btn = document.getElementById('expand-btn');
+            const arrow = document.getElementById('expand-arrow');
+            const hiddenRows = document.querySelectorAll('.hidden-row');
+            const isExpanded = btn.classList.contains('expanded');
+            
+            if (isExpanded) {
+                // Collapse
+                hiddenRows.forEach(row => row.classList.remove('show'));
+                btn.classList.remove('expanded');
+                document.getElementById('expand-btn-text').innerText = content[currentLang].expandBtn;
+            } else {
+                // Expand
+                hiddenRows.forEach(row => row.classList.add('show'));
+                btn.classList.add('expanded');
+                document.getElementById('expand-btn-text').innerText = content[currentLang].collapseBtn;
+            }
+        }
 
         // Tooltips for badges
         function initTooltips() {
