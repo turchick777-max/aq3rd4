@@ -556,45 +556,58 @@
             });
         }
 
-        setLang('en');
+        let currentLang = 'en';
 
         // Tooltips for badges
-        let currentLang = 'en';
-        const badges = document.querySelectorAll('.badge');
-        
-        badges.forEach(badge => {
-            let tooltip = null;
+        function initTooltips() {
+            const badges = document.querySelectorAll('.badge');
+            
+            badges.forEach(badge => {
+                badge.addEventListener('mouseenter', function() {
+                    const text = currentLang === 'ru' ? this.getAttribute('data-tooltip-ru') : this.getAttribute('data-tooltip-en');
+                    
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'tooltip show';
+                    tooltip.textContent = text;
+                    tooltip.setAttribute('data-tooltip-element', 'true');
+                    this.appendChild(tooltip);
+                });
 
-            badge.addEventListener('mouseenter', () => {
-                const text = currentLang === 'ru' ? badge.getAttribute('data-tooltip-ru') : badge.getAttribute('data-tooltip-en');
-                
-                tooltip = document.createElement('div');
-                tooltip.className = 'tooltip';
-                tooltip.textContent = text;
-                badge.appendChild(tooltip);
-                
-                setTimeout(() => tooltip.classList.add('show'), 10);
+                badge.addEventListener('mouseleave', function() {
+                    const tooltip = this.querySelector('[data-tooltip-element]');
+                    if (tooltip) {
+                        tooltip.classList.remove('show');
+                        setTimeout(() => {
+                            if (tooltip.parentNode === this) {
+                                this.removeChild(tooltip);
+                            }
+                        }, 200);
+                    }
+                });
             });
+        }
 
-            badge.addEventListener('mouseleave', () => {
-                if (tooltip) {
-                    tooltip.classList.remove('show');
-                    setTimeout(() => {
-                        if (tooltip && tooltip.parentNode) {
-                            tooltip.parentNode.removeChild(tooltip);
-                        }
-                        tooltip = null;
-                    }, 200);
-                }
-            });
-        });
-
-        // Update currentLang when language changes
+        // Wrap setLang to update currentLang
         const originalSetLang = setLang;
         setLang = function(lang) {
             currentLang = lang;
             originalSetLang(lang);
         };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initTooltips();
+        });
+        
+        setLang('en');
+        
+        // Call initTooltips immediately as well in case DOM is already loaded
+        if (document.readyState === 'loading') {
+            // DOM is still loading
+        } else {
+            // DOM is already ready
+            initTooltips();
+        }
     </script>
 </body>
 </html>
