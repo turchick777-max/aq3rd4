@@ -155,8 +155,13 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 40px;
-            padding: 20px 0;
+            padding: 20px 0 15px 0;
+        }
+
+        .dual-legend {
+            padding-bottom: 20px;
             border-bottom: 1px solid rgba(74, 144, 164, 0.1);
+            margin-top: -5px;
         }
 
         .dual-col h3 { 
@@ -335,6 +340,7 @@
                     <div class="status-check" id="txt-st2">✅ <span id="txt-st2-text">below guideline</span></div>
                 </div>
             </div>
+            <div class="dual-legend micro" id="txt-dual-legend">Raw — raw sample • After — after AQUINTAQA • Guideline — WHO/EU/US EPA benchmark</div>
 
             <div class="tech-block">
                 <div class="metric-row">
@@ -411,6 +417,7 @@
                 raw1Val: "48,000 mg/L", raw2Val: "23,200 mg/L",
                 guide1: "Guideline (WHO/EU/US EPA):", guide2: "Guideline (WHO/EU/US EPA):",
                 st1: "below guideline", st2: "below guideline",
+                dualLegend: "Raw — raw sample • After — after AQUINTAQA • Guideline — WHO/EU/US EPA benchmark",
                 partH: "Particle removal", partM: "Colloidal / suspended matter threshold; verified by pilot CoC.",
                 salH: "Feed salinity tolerance", salM: "Maximum dissolved salts (TDS) operating envelope.",
                 tableH: "Quality trends before/after",
@@ -435,6 +442,7 @@
                 raw1Val: "48 000 mg/L", raw2Val: "23 200 mg/L",
                 guide1: "Guideline (WHO/EU/US EPA):", guide2: "Guideline (WHO/EU/US EPA):",
                 st1: "ниже ориентира", st2: "ниже ориентира",
+                dualLegend: "Raw — исходная проба • After — после AQUINTAQA • Guideline — ориентир WHO/EU/US EPA",
                 partH: "Удаление частиц", partM: "Порог коллоидных и взвешенных частиц; подтверждено CoC.",
                 salH: "Минерализация фида", salM: "Максимальный рабочий диапазон по солесодержанию (TDS).",
                 tableH: "Тренды качества до/после",
@@ -473,6 +481,7 @@
             document.getElementById('txt-guide2').innerText = l.guide2;
             document.getElementById('txt-st1-text').innerText = l.st1; 
             document.getElementById('txt-st2-text').innerText = l.st2;
+            document.getElementById('txt-dual-legend').innerText = l.dualLegend;
             document.getElementById('txt-part-h').innerText = l.partH; document.getElementById('txt-part-m').innerText = l.partM;
             document.getElementById('txt-sal-h').innerText = l.salH; document.getElementById('txt-sal-m').innerText = l.salM;
             document.getElementById('txt-table-h').innerText = l.tableH;
