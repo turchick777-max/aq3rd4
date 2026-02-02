@@ -201,10 +201,14 @@
         .badge-row { display: flex; gap: 8px; margin-bottom: 25px; }
 
         .table-container {
-            max-height: 400px;
-            overflow-y: auto;
             margin-bottom: 15px;
             border: 1px solid rgba(74, 144, 164, 0.1);
+            transition: max-height 0.3s ease;
+        }
+
+        .table-container.expanded {
+            max-height: 400px;
+            overflow-y: auto;
         }
 
         .table-container::-webkit-scrollbar { 
@@ -222,6 +226,47 @@
 
         .table-container::-webkit-scrollbar-thumb:hover {
             background: rgba(74, 200, 220, 0.8);
+        }
+
+        tbody tr.hidden-row {
+            display: none;
+        }
+
+        .table-container.expanded tbody tr.hidden-row {
+            display: table-row;
+        }
+
+        .expand-btn {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--line);
+            color: var(--text-dim);
+            padding: 8px 12px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            font-size: 10px;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .expand-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .expand-arrow {
+            font-size: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .expand-btn.expanded .expand-arrow {
+            transform: rotate(180deg);
         }
 
         /* Right Side Table */
@@ -452,7 +497,7 @@
 
                 <h2 class="table-h" id="txt-table-h">Quality trends before/after</h2>
                 
-                <div class="table-container">
+                <div class="table-container" id="table-container">
                     <table>
                         <thead>
                             <tr>
@@ -467,6 +512,11 @@
                         </tbody>
                     </table>
                 </div>
+
+                <button class="expand-btn" id="expand-btn" onclick="toggleTable()">
+                    <span id="expand-btn-text">Show more parameters</span>
+                    <span class="expand-arrow" id="expand-arrow">▼</span>
+                </button>
 
                 <div class="legend" id="txt-legend">
                     // RED: CRITICAL_BASELINE_DETECTED<br>
@@ -498,6 +548,8 @@
                 guide1: "Guideline (WHO/EU/US EPA):", guide2: "Guideline (WHO/EU/US EPA):",
                 st1: "below guideline", st2: "below guideline",
                 dualLegend: "Raw — raw sample • After — after AQUINTAQA • Guideline — WHO/EU/US EPA benchmark",
+                expandBtn: "Show more parameters",
+                collapseBtn: "Show less",
                 partH: "Particle removal", partM: "colloids / suspended matter; verified on pilot samples (chain-of-custody).",
                 salH: "Feed salinity tolerance", salM: "dissolved salts (TDS); feed-dependent.",
                 tableH: "Quality trends before/after",
@@ -531,6 +583,8 @@
                 guide1: "Guideline (WHO/EU/US EPA):", guide2: "Guideline (WHO/EU/US EPA):",
                 st1: "ниже ориентира", st2: "ниже ориентира",
                 dualLegend: "Raw — исходная проба • After — после AQUINTAQA • Guideline — ориентир WHO/EU/US EPA",
+                expandBtn: "Показать больше параметров",
+                collapseBtn: "Свернуть",
                 partH: "Удаление частиц", partM: "коллоиды / взвеси; подтверждено пилотными пробами (chain-of-custody).",
                 salH: "Минерализация фида", salM: "по растворённым солям (TDS); зависит от состава фида (feed-dependent).",
                 tableH: "Тренды качества до/после",
@@ -581,6 +635,11 @@
             document.getElementById('txt-st1-text').innerText = l.st1; 
             document.getElementById('txt-st2-text').innerText = l.st2;
             document.getElementById('txt-dual-legend').innerText = l.dualLegend;
+            
+            // Update expand button text based on current state
+            const container = document.getElementById('table-container');
+            const isExpanded = container.classList.contains('expanded');
+            document.getElementById('expand-btn-text').innerText = isExpanded ? l.collapseBtn : l.expandBtn;
             document.getElementById('txt-part-h').innerText = l.partH; document.getElementById('txt-part-m').innerText = l.partM;
             document.getElementById('txt-sal-h').innerText = l.salH; document.getElementById('txt-sal-m').innerText = l.salM;
             document.getElementById('txt-table-h').innerText = l.tableH;
@@ -593,9 +652,10 @@
 
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
-            l.rows.forEach((row) => {
+            l.rows.forEach((row, index) => {
+                const hiddenClass = index >= 6 ? ' hidden-row' : '';
                 tbody.innerHTML += `
-                    <tr class="table-row">
+                    <tr class="table-row${hiddenClass}">
                         <td>${row[0]}</td>
                         <td><div class="status-cell"><span class="dot red"></span>${row[1]}</div></td>
                         <td><div class="status-cell"><span class="dot green"></span>${row[2]}</div></td>
@@ -606,6 +666,23 @@
         }
 
         let currentLang = 'en';
+
+        // Toggle table expansion
+        function toggleTable() {
+            const container = document.getElementById('table-container');
+            const btn = document.getElementById('expand-btn');
+            const isExpanded = container.classList.contains('expanded');
+            
+            if (isExpanded) {
+                container.classList.remove('expanded');
+                btn.classList.remove('expanded');
+                document.getElementById('expand-btn-text').innerText = content[currentLang].expandBtn;
+            } else {
+                container.classList.add('expanded');
+                btn.classList.add('expanded');
+                document.getElementById('expand-btn-text').innerText = content[currentLang].collapseBtn;
+            }
+        }
 
         // Tooltips for badges
         function initTooltips() {
