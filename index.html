@@ -219,31 +219,57 @@
         .badge::after {
             content: attr(data-tooltip-en);
             position: absolute;
-            bottom: calc(100% + 8px);
+            bottom: calc(100% + 10px);
             left: 50%;
-            transform: translateX(-50%);
-            background: rgba(10, 20, 35, 0.95);
+            transform: translateX(-50%) scale(0.95);
+            background: #0a1420;
             color: var(--text-main);
-            padding: 8px 12px;
+            padding: 10px 14px;
             border-radius: 4px;
             font-size: 10px;
-            white-space: nowrap;
+            white-space: normal;
+            max-width: 250px;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: all 0.2s ease;
             border: 1px solid var(--accent);
-            z-index: 100;
+            z-index: 1000;
             font-family: var(--font-main);
             text-transform: none;
             letter-spacing: 0.5px;
+            line-height: 1.4;
+            box-shadow: 0 4px 20px rgba(74, 200, 220, 0.3);
         }
 
         .badge:hover::after {
             opacity: 1;
+            transform: translateX(-50%) scale(1);
         }
 
         body.lang-ru .badge::after {
             content: attr(data-tooltip-ru);
+        }
+
+        /* Tooltip arrow */
+        .badge::before {
+            content: '';
+            position: absolute;
+            bottom: calc(100% + 2px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid var(--accent);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            z-index: 1000;
+        }
+
+        .badge:hover::before {
+            opacity: 1;
         }
 
         h2.table-h { 
@@ -407,10 +433,10 @@
         <section class="col">
             <div class="scroll-area">
                 <div class="badge-row">
-                    <div class="badge" data-tooltip-en="World Health Organization (WHO)" data-tooltip-ru="Всемирная организация здравоохранения (ВОЗ)">WHO_STD</div>
-                    <div class="badge" data-tooltip-en="European Union (EU)" data-tooltip-ru="Европейский союз (ЕС)">EU_COMP</div>
-                    <div class="badge" data-tooltip-en="U.S. Environmental Protection Agency (US EPA)" data-tooltip-ru="Агентство по охране окружающей среды США (EPA)">US_EPA</div>
-                    <div class="badge" data-tooltip-en="Independent lab verification. Reports & protocols in the Data Room after e-NDA." data-tooltip-ru="Независимое лабораторное подтверждение. Отчёты и протоколы — в Data Room после e-NDA.">LAB_CERT</div>
+                    <div class="badge" data-tooltip-en="World Health Organization (WHO)" data-tooltip-ru="Всемирная организация здравоохранения (ВОЗ)">WHO</div>
+                    <div class="badge" data-tooltip-en="European Union (EU)" data-tooltip-ru="Европейский союз (ЕС)">EU</div>
+                    <div class="badge" data-tooltip-en="U.S. Environmental Protection Agency (US EPA)" data-tooltip-ru="Агентство по охране окружающей среды США (EPA)">US EPA</div>
+                    <div class="badge" data-tooltip-en="Independent lab verification. Reports & protocols in the Data Room after e-NDA." data-tooltip-ru="Независимое лабораторное подтверждение. Отчёты и протоколы — в Data Room после e-NDA.">Lab-verified</div>
                 </div>
 
                 <h2 class="table-h" id="txt-table-h">Quality trends before/after</h2>
