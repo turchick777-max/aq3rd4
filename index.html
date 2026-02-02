@@ -270,21 +270,12 @@
             position: relative;
         }
 
-        .logo-circle {
+        .logo-img {
             width: 100px;
             height: 100px;
-            border: 1px solid rgba(255,255,255,0.25);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            object-fit: contain;
             margin-bottom: 10px;
-            background: linear-gradient(135deg, #0a1628 0%, #0d1f3c 100%);
-            box-shadow: 0 0 30px rgba(74, 200, 220, 0.2);
         }
-
-        .logo-circle svg { width: 60px; height: 60px; }
-        .logo-circle .logo-img { width: 65px; height: auto; object-fit: contain; }
         .brand-name { font-size: 13px; letter-spacing: 8px; font-weight: 300; text-transform: uppercase; font-family: var(--font-main); }
 
         /* Scrollbar */
@@ -404,14 +395,7 @@
 
     <footer>
         <div class="logo-box">
-            <div class="logo-circle">
-                <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Белый ромб -->
-                    <path d="M50 8 L18 55 L50 102 L82 55 Z" fill="white"/>
-                    <!-- Капля внутри -->
-                    <path d="M50 35 C50 35 38 50 38 62 C38 70 43 76 50 76 C57 76 62 70 62 62 C62 50 50 35 50 35Z" fill="#0d1f3c"/>
-                </svg>
-            </div>
+            <img src="webclip.png" alt="AQUINTAQA" class="logo-img">
             <div class="brand-name">AQUINTAQA</div>
         </div>
     </footer>
