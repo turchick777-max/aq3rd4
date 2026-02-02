@@ -364,7 +364,22 @@
         .dot.red { background: var(--red); box-shadow: 0 0 8px var(--red); }
         .dot.green { background: var(--green); box-shadow: 0 0 8px var(--green); }
 
-        .legend { font-size: 9px; font-family: var(--font-mono); color: var(--text-micro); margin-top: 0; line-height: 1.6; }
+        .table-label {
+            font-size: 10px;
+            font-family: var(--font-mono);
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table-notes {
+            font-size: 9px;
+            font-family: var(--font-main);
+            color: var(--text-dim);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
         
         .nda-note { 
             margin-top: auto; 
@@ -514,9 +529,12 @@
                     <span class="expand-arrow" id="expand-arrow">▼</span>
                 </button>
 
-                <div class="legend" id="txt-legend">
-                    // RED: CRITICAL_BASELINE_DETECTED<br>
-                    // GREEN: WITHIN_BENCHMARK_ENVELOPE
+                <div class="table-label" id="txt-table-label">
+                    Trends: public status view (no numbers)
+                </div>
+
+                <div class="table-notes" id="txt-table-notes">
+                    red = elevated baseline • green = within benchmark • blue = above benchmark. Full before/after tables, methods & reports after e-NDA (Data Room).
                 </div>
             </div>
 
@@ -550,7 +568,8 @@
                 salH: "Feed salinity tolerance", salM: "dissolved salts (TDS); feed-dependent.",
                 tableH: "Quality trends before/after",
                 thP: "Parameter", thR: "Raw (status)", thA: "After (status)", thB: "Benchmark: WHO / EU / US EPA",
-                legend: "// RED: CRITICAL_BASELINE_DETECTED<br>// GREEN: WITHIN_BENCHMARK_ENVELOPE",
+                tableLabel: "Trends: public status view (no numbers)",
+                tableNotes: "red = elevated baseline • green = within benchmark • blue = above benchmark. Full before/after tables, methods & reports after e-NDA (Data Room).",
                 nda: "SYSTEM_LOG: Homepage displays status-only visualization. Full numeric datasets and analysis reports available in Data Room after e-NDA.",
                 rows: [
                     ["TDS (total dissolved solids)", "RED HIGH", "GREEN OK"],
@@ -585,7 +604,8 @@
                 salH: "Минерализация фида", salM: "по растворённым солям (TDS); зависит от состава фида (feed-dependent).",
                 tableH: "Тренды качества до/после",
                 thP: "Parameter", thR: "Raw (status)", thA: "After (status)", thB: "Benchmark: WHO / EU / US EPA",
-                legend: "// КРАСНЫЙ: ПРЕВЫШЕНИЕ_БАЗОВОГО_УРОВНЯ<br>// ЗЕЛЕНЫЙ: В_ПРЕДЕЛАХ_НОРМАТИВА",
+                tableLabel: "Trends: public status view (no numbers)",
+                tableNotes: "red = повышенный baseline • green = в пределах ориентира • blue = выше ориентира. Полные \"до/после\" таблицы, методики и отчёты — после e-NDA (Data Room).",
                 nda: "ЛОГ_СИСТЕМЫ: На главной странице представлена только статус-визуализация. Полные массивы данных и отчеты доступны в Data Room после e-NDA.",
                 rows: [
                     ["TDS (общая минерализация)", "RED HIGH", "GREEN OK"],
@@ -643,7 +663,8 @@
             document.getElementById('th-r').innerText = l.thR; 
             document.getElementById('th-a').innerText = l.thA;
             document.getElementById('th-b').innerText = l.thB;
-            document.getElementById('txt-legend').innerHTML = l.legend;
+            document.getElementById('txt-table-label').innerText = l.tableLabel;
+            document.getElementById('txt-table-notes').innerText = l.tableNotes;
             document.getElementById('txt-nda').innerText = l.nda;
 
             const tbody = document.getElementById('table-body');
